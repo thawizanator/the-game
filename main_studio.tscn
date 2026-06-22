@@ -1,0 +1,204 @@
+[gd_scene format=3 uid="uid://c50bn7pgogykr"]
+
+[ext_resource type="Script" uid="uid://bmwgxean243us" path="res://main_studio.gd" id="1_ct2yh"]
+[ext_resource type="Script" uid="uid://erxor1jbunr8" path="res://addons/godot-socketio/socketio.gd" id="2_wohxn"]
+
+[sub_resource type="Theme" id="Theme_wohxn"]
+
+[node name="NeonGridStudio" type="CanvasLayer" unique_id=1322224470]
+script = ExtResource("1_ct2yh")
+
+[node name="SocketIO" type="Node" parent="." unique_id=42460624]
+script = ExtResource("2_wohxn")
+base_url = "http://192.168.4.119:3000"
+metadata/_custom_type_script = "uid://erxor1jbunr8"
+
+[node name="MainDashboard" type="HBoxContainer" parent="." unique_id=1693868561]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftControlPanel" type="VBoxContainer" parent="MainDashboard" unique_id=40837671]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+
+[node name="ControlTabs" type="TabContainer" parent="MainDashboard/LeftControlPanel" unique_id=1387471210]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+current_tab = 0
+
+[node name="Main Menu" type="VBoxContainer" parent="MainDashboard/LeftControlPanel/ControlTabs" unique_id=1229066608]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Label" type="Label" parent="MainDashboard/LeftControlPanel/ControlTabs/Main Menu" unique_id=900554811]
+layout_mode = 2
+text = "Menu"
+
+[node name="StartBroadcastBtn" type="Button" parent="MainDashboard/LeftControlPanel/ControlTabs/Main Menu" unique_id=1226163107]
+layout_mode = 2
+
+[node name="Games" type="VBoxContainer" parent="MainDashboard/LeftControlPanel/ControlTabs" unique_id=1663966443]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="TriggerNeonGridBtn" type="Button" parent="MainDashboard/LeftControlPanel/ControlTabs/Games" unique_id=2116476586]
+layout_mode = 2
+text = "Neon Grid"
+
+[node name="OpenBiddingWarBtn" type="Button" parent="MainDashboard/LeftControlPanel/ControlTabs/Games" unique_id=1348790873]
+layout_mode = 2
+text = "Bidding War"
+
+[node name="Administration" type="VBoxContainer" parent="MainDashboard/LeftControlPanel/ControlTabs" unique_id=1992603930]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="ModScroll" type="ScrollContainer" parent="MainDashboard/LeftControlPanel/ControlTabs/Administration" unique_id=58976434]
+layout_mode = 2
+
+[node name="AdminUserList" type="VBoxContainer" parent="MainDashboard/LeftControlPanel/ControlTabs/Administration/ModScroll" unique_id=933600394]
+layout_mode = 2
+
+[node name="RightBroadcastDisplay" type="AspectRatioContainer" parent="MainDashboard" unique_id=1062005463]
+layout_mode = 2
+size_flags_horizontal = 3
+ratio = 1.7778
+
+[node name="BroadcastViewportFrame" type="PanelContainer" parent="MainDashboard/RightBroadcastDisplay" unique_id=692376011]
+layout_mode = 2
+
+[node name="ActiveViewContent" type="Control" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame" unique_id=888949363]
+layout_mode = 2
+
+[node name="BiddingPanel" type="VBoxContainer" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent" unique_id=680462246]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -164.5
+offset_top = -52.372803
+offset_right = -15.5
+offset_bottom = 75.6272
+grow_horizontal = 2
+grow_vertical = 0
+theme = SubResource("Theme_wohxn")
+
+[node name="QuestionInput" type="LineEdit" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/BiddingPanel" unique_id=1138004496]
+layout_mode = 2
+placeholder_text = "Bidding Question"
+
+[node name="AnswerInput" type="LineEdit" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/BiddingPanel" unique_id=1243388737]
+layout_mode = 2
+placeholder_text = "Bidding Answer"
+
+[node name="LaunchBidBtn" type="Button" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/BiddingPanel" unique_id=446098068]
+layout_mode = 2
+text = "Broadcast Bidding"
+
+[node name="WinnerAnnouncement" type="Label" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/BiddingPanel" unique_id=888992032]
+layout_mode = 2
+
+[node name="BoardGrid" type="GridContainer" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent" unique_id=13640533]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -183.0
+offset_top = 20.627197
+offset_right = 3.0
+offset_bottom = 75.6272
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.8, 0.8)
+columns = 3
+
+[node name="Title0" type="Button" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/BoardGrid" unique_id=1791985543]
+layout_mode = 2
+text = "Open Bidding Setup"
+
+[node name="Title1" type="Button" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/BoardGrid" unique_id=1844077890]
+layout_mode = 2
+
+[node name="Title2" type="Button" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/BoardGrid" unique_id=1172730227]
+layout_mode = 2
+
+[node name="Title3" type="Button" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/BoardGrid" unique_id=1848373430]
+layout_mode = 2
+
+[node name="Title4" type="Button" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/BoardGrid" unique_id=1744882602]
+layout_mode = 2
+
+[node name="Title5" type="Button" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/BoardGrid" unique_id=1685257878]
+layout_mode = 2
+
+[node name="Title6" type="Button" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/BoardGrid" unique_id=1692885945]
+layout_mode = 2
+
+[node name="Title7" type="Button" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/BoardGrid" unique_id=979551575]
+layout_mode = 2
+
+[node name="Title8" type="Button" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/BoardGrid" unique_id=1404422059]
+layout_mode = 2
+
+[node name="VotingPanel" type="VBoxContainer" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent" unique_id=1797507012]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -110.0
+offset_top = -42.499985
+offset_right = -70.0
+offset_bottom = 42.500015
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VotingHeader" type="Label" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/VotingPanel" unique_id=568529054]
+layout_mode = 2
+
+[node name="BarChartContainer" type="VBoxContainer" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/VotingPanel" unique_id=1167593044]
+layout_mode = 2
+
+[node name="CatsVoteBar" type="ProgressBar" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/VotingPanel/BarChartContainer" unique_id=947879181]
+layout_mode = 2
+
+[node name="SharksVoteBar" type="ProgressBar" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/VotingPanel/BarChartContainer" unique_id=1408134907]
+layout_mode = 2
+
+[node name="LobbyPanel" type="VBoxContainer" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent" unique_id=1188145956]
+layout_mode = 0
+offset_left = -180.0
+offset_top = -75.62718
+offset_right = -140.0
+offset_bottom = -35.627182
+
+[node name="AudienceCounter" type="Label" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/LobbyPanel" unique_id=1957527007]
+layout_mode = 2
+
+[node name="RollCallList" type="VBoxContainer" parent="MainDashboard/RightBroadcastDisplay/BroadcastViewportFrame/ActiveViewContent/LobbyPanel" unique_id=1444085587]
+layout_mode = 2
+
+[node name="HostToolbar" type="HBoxContainer" parent="." unique_id=156574485]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="LobbyViewBtn" type="Button" parent="HostToolbar" unique_id=1864753294]
+layout_mode = 2
+text = "Show Lobby Grid"
+
+[node name="PollViewBtn" type="Button" parent="HostToolbar" unique_id=586643857]
+layout_mode = 2
+text = "Trigger Mini Game Vote"

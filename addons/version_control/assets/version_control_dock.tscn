@@ -1,0 +1,155 @@
+[gd_scene format=3 uid="uid://cax3trhixkmnx"]
+
+[ext_resource type="Script" uid="uid://bgmw47a6ssov1" path="res://addons/version_control/assets/version_control_dock.gd" id="1_5431i"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t3l2x"]
+
+[node name="VersionControl" type="Control" unique_id=460942864]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5431i")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1211751573]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=941748736]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer" unique_id=1894467738]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/ScrollContainer" unique_id=602760723]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1396690108]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_t3l2x")
+
+[node name="Major" type="HBoxContainer" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=2126948036]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/Major" unique_id=2081269445]
+layout_mode = 2
+text = "Major -"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/Major" unique_id=1019478388]
+layout_mode = 2
+size_flags_horizontal = 4
+value = 1.0
+rounded = true
+alignment = 1
+
+[node name="Minor" type="HBoxContainer" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=430262695]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/Minor" unique_id=410360084]
+layout_mode = 2
+text = "Minor -"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/Minor" unique_id=623720348]
+layout_mode = 2
+size_flags_horizontal = 4
+value = 1.0
+rounded = true
+alignment = 1
+
+[node name="Patch" type="HBoxContainer" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=348878942]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/Patch" unique_id=202103345]
+layout_mode = 2
+text = "Patch -"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/Patch" unique_id=1863632484]
+layout_mode = 2
+size_flags_horizontal = 4
+value = 1.0
+rounded = true
+alignment = 1
+
+[node name="Prefix" type="HBoxContainer" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1310478008]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/Prefix" unique_id=1020109442]
+layout_mode = 2
+text = "Prefix -"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/Prefix" unique_id=1606973786]
+custom_minimum_size = Vector2(86.5, 0)
+layout_mode = 2
+item_count = 6
+popup/item_0/text = "EA"
+popup/item_0/id = 0
+popup/item_1/text = "Alpha"
+popup/item_1/id = 1
+popup/item_2/text = "Beta"
+popup/item_2/id = 2
+popup/item_3/text = "Dev"
+popup/item_3/id = 3
+popup/item_4/text = "Build"
+popup/item_4/id = 4
+popup/item_5/text = "rc"
+popup/item_5/id = 5
+
+[node name="VersionLabel" type="Label" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1522778495]
+modulate = Color(1, 1, 1, 0.5882353)
+layout_mode = 2
+text = "Version: 1.1.1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextEdit" type="TextEdit" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=581289266]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+placeholder_text = "Commit Message"
+wrap_mode = 1
+
+[node name="Button" type="Button" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=56001493]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "  Commit  "
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1404467343]
+modulate = Color(1, 1, 1, 0.5882353)
+layout_mode = 2
+text = "Last Commit: 0.0.3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CheckBox" type="CheckBox" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=763164050]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Auto Increment Patch"
+
+[node name="CheckBox2" type="CheckBox" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=573799415]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Auto Commit"
+
+[node name="Button2" type="Button" parent="PanelContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1868850572]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "  Reset  "

@@ -1,0 +1,7 @@
+[gd_resource type="Theme" format=3 uid="uid://khkur3uktc7b"]
+
+[ext_resource type="FontFile" uid="uid://drb4cg2k31ib" path="res://fonts/BlockCraft.otf" id="1_q0ju8"]
+
+[resource]
+default_font = ExtResource("1_q0ju8")
+default_font_size = 16

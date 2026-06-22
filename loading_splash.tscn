@@ -1,0 +1,126 @@
+[gd_scene format=3 uid="uid://crloofxe0pjcw"]
+
+[ext_resource type="Script" uid="uid://w5em4pdeimx4" path="res://loading_splash.gd" id="1_ipxs3"]
+[ext_resource type="Theme" uid="uid://khkur3uktc7b" path="res://Text.tres" id="2_ay05f"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ipxs3"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ay05f"]
+bg_color = Color(0.6, 0.6, 0.6, 0.015686275)
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mrsaa"]
+bg_color = Color(0.1334365, 0.1334365, 0.13343644, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7e7pu"]
+draw_center = false
+
+[node name="LoadingSplash" type="Control" unique_id=1165624233]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ipxs3")
+
+[node name="Timer" type="Timer" parent="." unique_id=1339603024]
+autostart = true
+
+[node name="Background" type="ColorRect" parent="." unique_id=1905728698]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.20152658, 0.20152658, 0.20152658, 1)
+
+[node name="CenterLayout" type="VBoxContainer" parent="Background" unique_id=1338280364]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -198.0
+offset_top = 50.0
+offset_right = 198.0
+offset_bottom = 271.0
+grow_horizontal = 2
+
+[node name="GameLogo" type="Label" parent="Background/CenterLayout" unique_id=96942586]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_ipxs3")
+text = "Studio Code Live!"
+
+[node name="MarginContainer" type="MarginContainer" parent="Background/CenterLayout" unique_id=1429498677]
+layout_mode = 2
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_bottom = 25
+
+[node name="LoadingBar" type="ProgressBar" parent="Background/CenterLayout/MarginContainer" unique_id=1090343300]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_ay05f")
+
+[node name="StatusLableContainer" type="MarginContainer" parent="Background/CenterLayout" unique_id=1678723010]
+layout_mode = 2
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_bottom = 40
+
+[node name="StatusLabel" type="Label" parent="Background/CenterLayout/StatusLableContainer" unique_id=729422404]
+layout_mode = 2
+text = "Connecting to Switchboard...."
+
+[node name="DisclaimerBox" type="PanelContainer" parent="Background/CenterLayout" unique_id=1185426407]
+custom_minimum_size = Vector2(500, 250)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mrsaa")
+
+[node name="DisclaimerScroll" type="ScrollContainer" parent="Background/CenterLayout/DisclaimerBox" unique_id=6650194]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="Background/CenterLayout/DisclaimerBox/DisclaimerScroll" unique_id=447950698]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="DisclaimerText" type="Label" parent="Background/CenterLayout/DisclaimerBox/DisclaimerScroll/MarginContainer" unique_id=1618522190]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme = ExtResource("2_ay05f")
+autowrap_mode = 2
+
+[node name="VersionContainer" type="MarginContainer" parent="." unique_id=1924345979]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VersionLabel" type="Label" parent="VersionContainer" unique_id=602551848]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme = ExtResource("2_ay05f")
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_7e7pu")
+horizontal_alignment = 2
