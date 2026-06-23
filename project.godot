@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/version="0.4.1-Dev"
+config/version="0.4.2-Dev"
 run/main_scene="uid://crloofxe0pjcw"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="uid://dg15lf3ixcb6d"
