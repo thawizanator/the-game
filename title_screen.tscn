@@ -163,6 +163,11 @@ theme_override_font_sizes/font_size = 30
 text = "Back to Title"
 alignment = 2
 
+[node name="PlayerContainer" type="PanelContainer" parent="." unique_id=796255730]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
 [node name="StudioSetupContainer" type="ScrollContainer" parent="." unique_id=823198596]
 visible = false
 layout_mode = 1
@@ -313,6 +318,7 @@ theme = ExtResource("7_013yr")
 text = "⬅ Back to Host Menu"
 
 [node name="GameSettingsContainer" type="ScrollContainer" parent="." unique_id=1413073366]
+visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0

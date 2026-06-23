@@ -5,3 +5,4 @@
 [resource]
 default_font = ExtResource("1_q0ju8")
 default_font_size = 16
+/colors/color = Color(1, 1, 1, 1)

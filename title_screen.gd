@@ -48,6 +48,7 @@ func _on_host_btn_pressed() -> void:
 
 func _on_player_btn_pressed() -> void:
 	print("🎮 Player App client initialization...")
+	get_tree().change_scene_to_file("res://player_title_screen.tscn")
 
 func _on_exit_game_btn_pressed() -> void:
 	get_tree().quit()
