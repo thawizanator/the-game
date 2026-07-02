@@ -93,6 +93,8 @@ func _on_save_settings_btn_pressed() -> void:
 	config.set_value("ActiveGames", "game_wheel", game_3_check.button_pressed)
 	config.set_value("ActiveGames", "game_polls", game_4_check.button_pressed)
 	
+	# hello for changes
+	
 	var error = config.save(SAVE_PATH)
 	if error == OK:
 		print("💾 Studio config saved successfully to: ", OS.get_user_data_dir())
