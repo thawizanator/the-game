@@ -1,0 +1,423 @@
+[gd_scene format=3 uid="uid://b4o3pfgb6xpt5"]
+
+[ext_resource type="Script" uid="uid://ct3g5vshkxvt7" path="res://title_screen.gd" id="1_05l2w"]
+[ext_resource type="FontFile" uid="uid://c8fr33nqjgb3x" path="res://fonts/PressStart2P-Regular.ttf" id="2_05l2w"]
+[ext_resource type="Texture2D" uid="uid://bbjtdguj5e70f" path="res://images/bgimg003.png" id="2_jqemp"]
+[ext_resource type="Theme" uid="uid://dubua3p8axxng" path="res://buttons.tres" id="3_hafda"]
+[ext_resource type="FontFile" uid="uid://unb0bwdtrssh" path="res://fonts/Pixel Game.otf" id="5_hafda"]
+[ext_resource type="Theme" uid="uid://bxauvt75nc8qv" path="res://Title.tres" id="6_jqemp"]
+[ext_resource type="Theme" uid="uid://khkur3uktc7b" path="res://Text.tres" id="7_013yr"]
+[ext_resource type="Texture2D" uid="uid://bb2slrj0uamp5" path="res://images/twitchlogo.png" id="8_013yr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tpml5"]
+bg_color = Color(0.1612511, 0.16125113, 0.16125101, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.15863365, 0.6037696, 0.6038372, 1)
+border_blend = true
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8vmu4"]
+content_margin_top = 20.0
+content_margin_bottom = 50.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xfn3p"]
+content_margin_left = 20.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rhgbh"]
+content_margin_left = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xfn3p"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.011764706, 0, 0.26666668, 0.85490197)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.07450981, 0.8784314, 0.9882353, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="Theme" id="Theme_8vmu4"]
+VBoxContainer/constants/separation = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_013yr"]
+draw_center = false
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_8vmu4"]
+
+[node name="TitleScreen" type="Control" unique_id=1739366575]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_05l2w")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1678545294]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_jqemp")
+expand_mode = 3
+
+[node name="MainMenuContainer" type="VBoxContainer" parent="." unique_id=1581199903]
+visible = false
+layout_mode = 0
+offset_left = 256.0
+offset_top = 111.0
+offset_right = 1024.0
+offset_bottom = 386.0
+alignment = 1
+
+[node name="GameTitleLabel" type="Label" parent="MainMenuContainer" unique_id=1613351556]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 7
+theme_override_constants/outline_size = 3
+theme_override_constants/shadow_outline_size = 4
+theme_override_fonts/font = ExtResource("2_05l2w")
+theme_override_font_sizes/font_size = 48
+text = "STUDIO CODE LIVE"
+metadata/_edit_lock_ = true
+
+[node name="HostBtn" type="Button" parent="MainMenuContainer" unique_id=903067533]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("3_hafda")
+theme_override_font_sizes/font_size = 24
+text = "Host"
+alignment = 2
+metadata/_edit_lock_ = true
+
+[node name="PlayerBtn" type="Button" parent="MainMenuContainer" unique_id=2007011977]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("3_hafda")
+theme_override_font_sizes/font_size = 24
+text = "Player"
+alignment = 2
+
+[node name="ExitGameBtn" type="Button" parent="MainMenuContainer" unique_id=1044775727]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("3_hafda")
+theme_override_font_sizes/font_size = 24
+text = "Exit Game"
+alignment = 2
+
+[node name="HostContainer" type="PanelContainer" parent="." unique_id=521631919]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tpml5")
+
+[node name="HostMenuContainer" type="VBoxContainer" parent="HostContainer" unique_id=1818700730]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HostTitleLabel" type="Label" parent="HostContainer/HostMenuContainer" unique_id=1007761552]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_hafda")
+theme_override_font_sizes/font_size = 48
+text = "HOST CONTROL ROOM SETUP"
+horizontal_alignment = 1
+
+[node name="StudioSetupBtn" type="Button" parent="HostContainer/HostMenuContainer" unique_id=1657766678]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("3_hafda")
+theme_override_font_sizes/font_size = 30
+text = "Studio Setup"
+alignment = 2
+
+[node name="StartStudioBtn" type="Button" parent="HostContainer/HostMenuContainer" unique_id=593762978]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("3_hafda")
+theme_override_font_sizes/font_size = 24
+text = "Start Studio Panel"
+alignment = 2
+
+[node name="GameSettingsBtn" type="Button" parent="HostContainer/HostMenuContainer" unique_id=1354843414]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("3_hafda")
+theme_override_font_sizes/font_size = 30
+text = "Game Settings"
+alignment = 2
+
+[node name="HostBackBtn" type="Button" parent="HostContainer/HostMenuContainer" unique_id=924453220]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("3_hafda")
+theme_override_font_sizes/font_size = 30
+text = "Back to Title"
+alignment = 2
+
+[node name="PlayerContainer" type="PanelContainer" parent="." unique_id=796255730]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="StudioSetupContainer" type="ScrollContainer" parent="." unique_id=823198596]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="StudioSetupContainer" unique_id=40718672]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PanelTitle" type="Label" parent="StudioSetupContainer/VBox" unique_id=513247874]
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("6_jqemp")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxEmpty_8vmu4")
+text = "STUDIO SETUP CONFIGURATION"
+horizontal_alignment = 1
+
+[node name="PlayersRow" type="HBoxContainer" parent="StudioSetupContainer/VBox" unique_id=44868117]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="StudioSetupContainer/VBox/PlayersRow" unique_id=1775275894]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("7_013yr")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xfn3p")
+text = "Max Players (0-100):"
+
+[node name="PlayerCountSpin" type="SpinBox" parent="StudioSetupContainer/VBox/PlayersRow" unique_id=1591648125]
+layout_mode = 2
+
+[node name="ModsRow" type="HBoxContainer" parent="StudioSetupContainer/VBox" unique_id=19314780]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="StudioSetupContainer/VBox/ModsRow" unique_id=1572456748]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme = ExtResource("7_013yr")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_rhgbh")
+text = "Moderators Count:"
+
+[node name="ModCountSpin" type="SpinBox" parent="StudioSetupContainer/VBox/ModsRow" unique_id=586847094]
+layout_mode = 2
+max_value = 4.0
+
+[node name="MonitorRow" type="HBoxContainer" parent="StudioSetupContainer/VBox" unique_id=579291089]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+alignment = 1
+
+[node name="DualMonitorCheck" type="CheckBox" parent="StudioSetupContainer/VBox/MonitorRow" unique_id=410500045]
+layout_mode = 2
+theme = ExtResource("7_013yr")
+text = "Enable Dual Monitor Layout"
+
+[node name="SeparateWindowsCheck" type="CheckBox" parent="StudioSetupContainer/VBox/MonitorRow" unique_id=79975358]
+layout_mode = 2
+theme = ExtResource("7_013yr")
+text = "Enable Separate Broadcast Screen"
+
+[node name="ScoreRow" type="HBoxContainer" parent="StudioSetupContainer/VBox" unique_id=2073215708]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="StudioSetupContainer/VBox/ScoreRow" unique_id=884879840]
+layout_mode = 2
+theme = ExtResource("7_013yr")
+text = "Scoreboard Tracking:"
+
+[node name="ScoreModeOption" type="OptionButton" parent="StudioSetupContainer/VBox/ScoreRow" unique_id=592530096]
+layout_mode = 2
+theme = ExtResource("7_013yr")
+item_count = 2
+popup/item_0/text = "Per Session"
+popup/item_0/id = 0
+popup/item_1/text = "Keep Everything"
+popup/item_1/id = 1
+
+[node name="TwitchRow" type="HBoxContainer" parent="StudioSetupContainer/VBox" unique_id=157293776]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="TwitchInteractCheck" type="CheckBox" parent="StudioSetupContainer/VBox/TwitchRow" unique_id=1905727117]
+layout_mode = 2
+theme = ExtResource("7_013yr")
+text = "Allow Twitch Chat Integration"
+
+[node name="GamesSectionLabel" type="Label" parent="StudioSetupContainer/VBox" unique_id=1243242045]
+layout_mode = 2
+theme = ExtResource("7_013yr")
+text = "Active Game Modules:"
+
+[node name="GamesGrid" type="GridContainer" parent="StudioSetupContainer/VBox" unique_id=530843359]
+layout_mode = 2
+columns = 2
+
+[node name="Game1Check" type="CheckBox" parent="StudioSetupContainer/VBox/GamesGrid" unique_id=296965078]
+layout_mode = 2
+theme = ExtResource("7_013yr")
+text = "Game 1"
+
+[node name="Game2Check" type="CheckBox" parent="StudioSetupContainer/VBox/GamesGrid" unique_id=858035054]
+layout_mode = 2
+theme = ExtResource("7_013yr")
+text = "Game 2"
+
+[node name="Game3Check" type="CheckBox" parent="StudioSetupContainer/VBox/GamesGrid" unique_id=283881578]
+layout_mode = 2
+theme = ExtResource("7_013yr")
+text = "Game 3"
+
+[node name="Game4Check" type="CheckBox" parent="StudioSetupContainer/VBox/GamesGrid" unique_id=1194975276]
+layout_mode = 2
+theme = ExtResource("7_013yr")
+text = "Game 4"
+
+[node name="ActionButtonsRow" type="HBoxContainer" parent="StudioSetupContainer/VBox" unique_id=842421670]
+layout_mode = 2
+size_flags_vertical = 0
+alignment = 1
+
+[node name="SaveSettingsBtn" type="Button" parent="StudioSetupContainer/VBox/ActionButtonsRow" unique_id=1100374064]
+layout_mode = 2
+theme = ExtResource("7_013yr")
+text = "💾 Save Configuration\""
+
+[node name="ColorRect" type="ColorRect" parent="StudioSetupContainer/VBox/ActionButtonsRow" unique_id=433557386]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+color = Color(1, 1, 1, 0)
+
+[node name="SetupBackBtn" type="Button" parent="StudioSetupContainer/VBox/ActionButtonsRow" unique_id=604424158]
+layout_mode = 2
+theme = ExtResource("7_013yr")
+text = "⬅ Back to Host Menu"
+
+[node name="GameSettingsContainer" type="ScrollContainer" parent="." unique_id=1413073366]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GSVbox" type="VBoxContainer" parent="GameSettingsContainer" unique_id=1430083604]
+layout_mode = 2
+
+[node name="GSTitle" type="Label" parent="GameSettingsContainer/GSVbox" unique_id=626511869]
+layout_mode = 2
+
+[node name="TwitchPanelContainer" type="PanelContainer" parent="." unique_id=1403357108]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -360.0
+offset_top = -298.0
+offset_right = -60.0
+offset_bottom = -148.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_xfn3p")
+metadata/_edit_group_ = true
+
+[node name="tsVboxTwitch" type="VBoxContainer" parent="TwitchPanelContainer" unique_id=905430011]
+layout_mode = 2
+theme = SubResource("Theme_8vmu4")
+
+[node name="TwitchLogo" type="TextureRect" parent="TwitchPanelContainer/tsVboxTwitch" unique_id=1124037227]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("8_013yr")
+expand_mode = 1
+
+[node name="TwitchStatusLabel" type="Label" parent="TwitchPanelContainer/tsVboxTwitch" unique_id=177126359]
+layout_mode = 2
+size_flags_vertical = 0
+theme = ExtResource("7_013yr")
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxFlat_013yr")
+text = "Not Linked 🔗"
+horizontal_alignment = 1
+
+[node name="twitch_info" type="Label" parent="TwitchPanelContainer/tsVboxTwitch" unique_id=1124857187]
+layout_mode = 2
+theme = ExtResource("7_013yr")
+theme_override_styles/normal = SubResource("StyleBoxLine_8vmu4")
+text = "(click to link account)"
+horizontal_alignment = 1
+
+[node name="TwitchConnectBtn" type="Button" parent="TwitchPanelContainer/tsVboxTwitch" unique_id=1160674698]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "🔐 Connect Twitch Account"
+
+[connection signal="pressed" from="MainMenuContainer/HostBtn" to="." method="_on_host_btn_pressed"]
+[connection signal="pressed" from="MainMenuContainer/PlayerBtn" to="." method="_on_player_btn_pressed"]
+[connection signal="pressed" from="MainMenuContainer/ExitGameBtn" to="." method="_on_exit_game_btn_pressed"]
+[connection signal="pressed" from="HostContainer/HostMenuContainer/StudioSetupBtn" to="." method="_on_studio_setup_btn_pressed"]
+[connection signal="pressed" from="HostContainer/HostMenuContainer/StartStudioBtn" to="." method="_on_start_studio_btn_pressed"]
+[connection signal="pressed" from="HostContainer/HostMenuContainer/GameSettingsBtn" to="." method="_on_game_settings_btn_pressed"]
+[connection signal="pressed" from="HostContainer/HostMenuContainer/HostBackBtn" to="." method="_on_host_back_btn_pressed"]
+[connection signal="pressed" from="StudioSetupContainer/VBox/ActionButtonsRow/SaveSettingsBtn" to="." method="_on_save_settings_btn_pressed"]
+[connection signal="pressed" from="StudioSetupContainer/VBox/ActionButtonsRow/SetupBackBtn" to="." method="_on_setup_back_btn_pressed"]
