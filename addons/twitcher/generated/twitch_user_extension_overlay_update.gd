@@ -9,22 +9,22 @@ class_name TwitchUserExtensionOverlayUpdate
 	
 ## A Boolean value that determines the extension’s activation state. If **false**, the user has not configured an overlay extension.
 @export var active: bool:
-	set(val):
+	set(val): 
 		active = val
 		track_data(&"active", val)
 
 ## An ID that identifies the extension.
 @export var id: String:
-	set(val):
+	set(val): 
 		id = val
 		track_data(&"id", val)
 
 ## The extension’s version.
 @export var version: String:
-	set(val):
+	set(val): 
 		version = val
 		track_data(&"version", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -34,7 +34,6 @@ static func create(_active: bool) -> TwitchUserExtensionOverlayUpdate:
 	return twitch_user_extension_overlay_update
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchUserExtensionOverlayUpdate:
 	var result: TwitchUserExtensionOverlayUpdate = TwitchUserExtensionOverlayUpdate.new()
 	if d.get("active", null) != null:
@@ -44,4 +43,3 @@ static func from_json(d: Dictionary) -> TwitchUserExtensionOverlayUpdate:
 	if d.get("version", null) != null:
 		result.version = d["version"]
 	return result
-

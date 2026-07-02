@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://8jlhxp5mpr5a"]
+
+[ext_resource type="Texture2D" uid="uid://k106k4gesukm" path="res://images/bgimg005.png" id="1_psplo"]
+
+[node name="Control" type="Control" unique_id=2085670285]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HostBackground" type="TextureRect" parent="." unique_id=1766728472]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_psplo")

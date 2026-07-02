@@ -9,58 +9,58 @@ class_name TwitchBannedUser
 	
 ## The ID of the banned user.
 @export var user_id: String:
-	set(val):
+	set(val): 
 		user_id = val
 		track_data(&"user_id", val)
 
 ## The banned user’s login name.
 @export var user_login: String:
-	set(val):
+	set(val): 
 		user_login = val
 		track_data(&"user_login", val)
 
 ## The banned user’s display name.
 @export var user_name: String:
-	set(val):
+	set(val): 
 		user_name = val
 		track_data(&"user_name", val)
 
 ## The UTC date and time (in RFC3339 format) of when the timeout expires, or an empty string if the user is permanently banned.
 @export var expires_at: String:
-	set(val):
+	set(val): 
 		expires_at = val
 		track_data(&"expires_at", val)
 
 ## The UTC date and time (in RFC3339 format) of when the user was banned.
 @export var created_at: String:
-	set(val):
+	set(val): 
 		created_at = val
 		track_data(&"created_at", val)
 
 ## The reason the user was banned or put in a timeout if the moderator provided one.
 @export var reason: String:
-	set(val):
+	set(val): 
 		reason = val
 		track_data(&"reason", val)
 
 ## The ID of the moderator that banned the user or put them in a timeout.
 @export var moderator_id: String:
-	set(val):
+	set(val): 
 		moderator_id = val
 		track_data(&"moderator_id", val)
 
 ## The moderator’s login name.
 @export var moderator_login: String:
-	set(val):
+	set(val): 
 		moderator_login = val
 		track_data(&"moderator_login", val)
 
 ## The moderator’s display name.
 @export var moderator_name: String:
-	set(val):
+	set(val): 
 		moderator_name = val
 		track_data(&"moderator_name", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -78,7 +78,6 @@ static func create(_user_id: String, _user_login: String, _user_name: String, _e
 	return twitch_banned_user
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchBannedUser:
 	var result: TwitchBannedUser = TwitchBannedUser.new()
 	if d.get("user_id", null) != null:
@@ -100,4 +99,3 @@ static func from_json(d: Dictionary) -> TwitchBannedUser:
 	if d.get("moderator_name", null) != null:
 		result.moderator_name = d["moderator_name"]
 	return result
-

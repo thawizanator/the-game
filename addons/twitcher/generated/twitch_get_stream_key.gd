@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## A list that contains the channel’s stream key.
 	@export var data: Array[ResponseData]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -26,13 +26,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(ResponseData.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -43,10 +41,10 @@ class ResponseData extends TwitchData:
 
 	## The channel’s stream key.
 	@export var stream_key: String:
-		set(val):
+		set(val): 
 			stream_key = val
 			track_data(&"stream_key", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -56,7 +54,6 @@ class ResponseData extends TwitchData:
 		return response_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseData:
 		var result: ResponseData = ResponseData.new()
 		if d.get("stream_key", null) != null:

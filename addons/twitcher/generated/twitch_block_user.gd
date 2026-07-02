@@ -18,7 +18,7 @@ class Opt extends TwitchData:
 	##   
 	## .
 	@export var source_context: String:
-		set(val):
+		set(val): 
 			source_context = val
 			track_data(&"source_context", val)
 	
@@ -28,7 +28,7 @@ class Opt extends TwitchData:
 	## * spam
 	## * other
 	@export var reason: String:
-		set(val):
+		set(val): 
 			reason = val
 			track_data(&"reason", val)
 	
@@ -40,7 +40,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("source_context", null) != null:

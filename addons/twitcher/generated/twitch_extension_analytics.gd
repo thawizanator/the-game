@@ -9,28 +9,28 @@ class_name TwitchExtensionAnalytics
 	
 ## An ID that identifies the extension that the report was generated for.
 @export var extension_id: String:
-	set(val):
+	set(val): 
 		extension_id = val
 		track_data(&"extension_id", val)
 
 ## The URL that you use to download the report. The URL is valid for 5 minutes.
 @export var URL: String:
-	set(val):
+	set(val): 
 		URL = val
 		track_data(&"URL", val)
 
 ## The type of report.
 @export var type: String:
-	set(val):
+	set(val): 
 		type = val
 		track_data(&"type", val)
 
 ## The reporting window’s start and end dates, in RFC3339 format.
 @export var date_range: DateRange:
-	set(val):
+	set(val): 
 		date_range = val
 		track_data(&"date_range", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -43,7 +43,6 @@ static func create(_extension_id: String, _URL: String, _type: String, _date_ran
 	return twitch_extension_analytics
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchExtensionAnalytics:
 	var result: TwitchExtensionAnalytics = TwitchExtensionAnalytics.new()
 	if d.get("extension_id", null) != null:
@@ -64,13 +63,13 @@ class DateRange extends TwitchData:
 
 	## The reporting window’s start date.
 	@export var started_at: String:
-		set(val):
+		set(val): 
 			started_at = val
 			track_data(&"started_at", val)
 	
 	## The reporting window’s end date.
 	@export var ended_at: String:
-		set(val):
+		set(val): 
 			ended_at = val
 			track_data(&"ended_at", val)
 	
@@ -84,7 +83,6 @@ class DateRange extends TwitchData:
 		return date_range
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> DateRange:
 		var result: DateRange = DateRange.new()
 		if d.get("started_at", null) != null:

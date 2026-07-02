@@ -13,10 +13,10 @@ class Body extends TwitchData:
 
 	## A list that contains information about the warning.
 	@export var data: BodyData:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
-	
+	var response: BufferedHTTPClient.ResponseData
 	
 	
 	## Constructor with all required fields.
@@ -26,7 +26,6 @@ class Body extends TwitchData:
 		return body
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Body:
 		var result: Body = Body.new()
 		if d.get("data", null) != null:
@@ -41,13 +40,13 @@ class BodyData extends TwitchData:
 
 	## The ID of the twitch user to be warned.
 	@export var user_id: String:
-		set(val):
+		set(val): 
 			user_id = val
 			track_data(&"user_id", val)
 	
 	## A custom reason for the warning. **Max 500 chars.**
 	@export var reason: String:
-		set(val):
+		set(val): 
 			reason = val
 			track_data(&"reason", val)
 	
@@ -61,7 +60,6 @@ class BodyData extends TwitchData:
 		return body_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> BodyData:
 		var result: BodyData = BodyData.new()
 		if d.get("user_id", null) != null:
@@ -78,7 +76,7 @@ class Response extends TwitchData:
 
 	## A list that contains information about the warning.
 	@export var data: Array[ResponseData]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -91,13 +89,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(ResponseData.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -108,28 +104,28 @@ class ResponseData extends TwitchData:
 
 	## The ID of the channel in which the warning will take effect.
 	@export var broadcaster_id: String:
-		set(val):
+		set(val): 
 			broadcaster_id = val
 			track_data(&"broadcaster_id", val)
 	
 	## The ID of the warned user.
 	@export var user_id: String:
-		set(val):
+		set(val): 
 			user_id = val
 			track_data(&"user_id", val)
 	
 	## The ID of the user who applied the warning.
 	@export var moderator_id: String:
-		set(val):
+		set(val): 
 			moderator_id = val
 			track_data(&"moderator_id", val)
 	
 	## The reason provided for warning.
 	@export var reason: String:
-		set(val):
+		set(val): 
 			reason = val
 			track_data(&"reason", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -142,7 +138,6 @@ class ResponseData extends TwitchData:
 		return response_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseData:
 		var result: ResponseData = ResponseData.new()
 		if d.get("broadcaster_id", null) != null:

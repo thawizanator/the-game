@@ -9,22 +9,22 @@ class_name TwitchUserModerator
 	
 ## The ID of the user that has permission to moderate the broadcaster’s channel.
 @export var user_id: String:
-	set(val):
+	set(val): 
 		user_id = val
 		track_data(&"user_id", val)
 
 ## The user’s login name.
 @export var user_login: String:
-	set(val):
+	set(val): 
 		user_login = val
 		track_data(&"user_login", val)
 
 ## The user’s display name.
 @export var user_name: String:
-	set(val):
+	set(val): 
 		user_name = val
 		track_data(&"user_name", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -36,7 +36,6 @@ static func create(_user_id: String, _user_login: String, _user_name: String) ->
 	return twitch_user_moderator
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchUserModerator:
 	var result: TwitchUserModerator = TwitchUserModerator.new()
 	if d.get("user_id", null) != null:
@@ -46,4 +45,3 @@ static func from_json(d: Dictionary) -> TwitchUserModerator:
 	if d.get("user_name", null) != null:
 		result.user_name = d["user_name"]
 	return result
-

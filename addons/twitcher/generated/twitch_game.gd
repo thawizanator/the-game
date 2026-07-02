@@ -9,28 +9,28 @@ class_name TwitchGame
 	
 ## An ID that identifies the category or game.
 @export var id: String:
-	set(val):
+	set(val): 
 		id = val
 		track_data(&"id", val)
 
 ## The category’s or game’s name.
 @export var name: String:
-	set(val):
+	set(val): 
 		name = val
 		track_data(&"name", val)
 
 ## A URL to the category’s or game’s box art. You must replace the `{width}x{height}` placeholder with the size of image you want.
 @export var box_art_url: String:
-	set(val):
+	set(val): 
 		box_art_url = val
 		track_data(&"box_art_url", val)
 
 ## The ID that [IGDB](https://www.igdb.com/) uses to identify this game. If the IGDB ID is not available to Twitch, this field is set to an empty string.
 @export var igdb_id: String:
-	set(val):
+	set(val): 
 		igdb_id = val
 		track_data(&"igdb_id", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -43,7 +43,6 @@ static func create(_id: String, _name: String, _box_art_url: String, _igdb_id: S
 	return twitch_game
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchGame:
 	var result: TwitchGame = TwitchGame.new()
 	if d.get("id", null) != null:
@@ -55,4 +54,3 @@ static func from_json(d: Dictionary) -> TwitchGame:
 	if d.get("igdb_id", null) != null:
 		result.igdb_id = d["igdb_id"]
 	return result
-

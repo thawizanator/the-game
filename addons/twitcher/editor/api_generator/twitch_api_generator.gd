@@ -20,7 +20,7 @@ static var _log: TwitchLogger = TwitchLogger.new("TwitchAPI")
 static var instance: TwitchAPI
 
 ## Maximal tries to reauthrorize before giving up the request.
-const MAX_AUTH_ERRORS: int = 3
+const MAX_AUTH_ERRORS = 3
 
 ## Called when the API returns unauthenticated mostly cause the accesstoken is expired
 signal unauthenticated
@@ -30,7 +30,7 @@ signal unauthorized
 
 ## To authorize against the Twitch API
 @export var token: OAuthToken:
-	set(val):
+	set(val): 
 		token = val
 		update_configuration_warnings()
 ## OAuth settings needed for client information
@@ -49,16 +49,16 @@ func _ready() -> void:
 	client = BufferedHTTPClient.new()
 	client.name = "ApiClient"
 	add_child(client)
-
-
+	
+	
 func _enter_tree() -> void:
 	if instance == null: instance = self
-
-
+	
+	
 func _exit_tree() -> void:
 	if instance == self: instance = null
-
-
+	
+	
 func _get_configuration_warnings() -> PackedStringArray:
 	var result: PackedStringArray = []
 	if token == null:
@@ -66,8 +66,8 @@ func _get_configuration_warnings() -> PackedStringArray:
 	if oauth_setting == null:
 		result.append("Please set the correct oauth settings")
 	return result
-
-
+		
+		
 func request(path: String, method: int, body: Variant = "", content_type: String = "", error_count: int = 0) -> BufferedHTTPClient.ResponseData:
 	var header : Dictionary = {
 		"Authorization": "Bearer %s" % [await token.get_access_token()],
@@ -84,48 +84,29 @@ func request(path: String, method: int, body: Variant = "", content_type: String
 	else:
 		request_body = JSON.stringify(body)
 
-	var req: BufferedHTTPClient.RequestData = client.request(api_host + path, method, header, request_body)
-	var res: BufferedHTTPClient.ResponseData = await client.wait_for_request(req)
+	var request: BufferedHTTPClient.RequestData = client.request(api_host + path, method, header, request_body)
+	var response: BufferedHTTPClient.ResponseData = await client.wait_for_request(request)
 
-	# Try to fix Godot TLS Bug
-	if res.result == 5:
-		return await retry(req, res, path, method, body, content_type, error_count + 1)
-
-	match res.response_code:
+	match response.response_code:
+		400:
+			var error_message: String = response.response_data.get_string_from_utf8()
+			_log.e("'%s' failed cause of: \\n%s" % [path, error_message])
 		401: # Token expired / or missing permissions
 			_log.e("'%s' is unauthorized. It is probably your scopes." % path)
 			unauthorized.emit()
 		403:
-			_log.i("'%s' is forbidden. Refresh token." % path)
-			push_error(res.response_data.get_string_from_utf8())
+			_log.i("'%s' is unauthenticated. Refresh token." % path)
 			unauthenticated.emit()
 			await token.authorized
-			return await retry(req, res, path, method, body, content_type, error_count + 1)
-	return res
-
-
-func retry(request: BufferedHTTPClient.RequestData,
-		response: BufferedHTTPClient.ResponseData,
-		path: String,
-		method: int,
-		body: Variant = "",
-		content_type: String = "",
-		error_count: int = 0) -> BufferedHTTPClient.ResponseData:
-	if error_count + 1 < MAX_AUTH_ERRORS:
-		return await request(path, method, body, content_type, error_count + 1)
-	else:
-		# Give up the request after trying multiple times and
-		# return an empty response with correct error code
-		var empty_response: BufferedHTTPClient.ResponseData = client.empty_response(request)
-		empty_response.response_code = response.response_code
-		return empty_response
-
-
-func _handle_error(method_name: String, response: BufferedHTTPClient.ResponseData) -> void:
-	var error_json: String = response.response_data.get_string_from_utf8()
-	var error = JSON.parse_string(error_json)
-	push_error("Problems while calling %s: " % method_name, error["message"] if error and "message" in error else "")
-	_log.d(error_json)
+			if error_count + 1 < MAX_AUTH_ERRORS:
+				return await request(path, method, body, content_type, error_count + 1)
+			else:
+				# Give up the request after trying multiple times and
+				# return an empty response with correct error code
+				var empty_response: BufferedHTTPClient.ResponseData = client.empty_response(request)
+				empty_response.response_code = response.response_code
+				return empty_response
+	return response
 
 
 ## Converts unix timestamp to RFC 3339 (example: 2021-10-27T00:00:00Z) when passed a string uses as is
@@ -142,74 +123,59 @@ static func get_rfc_3339_date_format(time: Variant) -> String:
 var grouped_files: Dictionary[String, Variant] = {}
 
 
-func generate_api() -> void:
-	# Get all classes in the API Folder to remove not needed anymore
-	var existing_classes: PackedStringArray = get_all_classes(api_output_path)
-
-	for component: Variant in parser.components:
-		prepare_component(component)
-
-	# Generate TwitchAPI
-	var twitch_api_code: String = twitch_api_header
-	for method: TwitchGenMethod in parser.methods:
-		twitch_api_code += method_code(method)
-	write_output_file(api_output_path + "twitch_api.gd", twitch_api_code)
-	existing_classes.erase("twitch_api.gd")
-
-	# Generate Components
-	for component: Variant in grouped_files.values():
-		var code: String = ""
-		if component is GroupedComponent:
-			code = group_code(component)
-		else:
-			code = component_code(component, 0)
-		write_output_file(api_output_path + component.get_filename(), code)
-		existing_classes.erase(component.get_filename())
-
-
-	print("API regenerated you can find it under: %s" % api_output_path)
-
-	for cls in existing_classes:
-		if cls.get_extension() == "gd":
-			var absolute_path: String = ProjectSettings.globalize_path(api_output_path + cls)
-			DirAccess.remove_absolute(absolute_path)
-			DirAccess.remove_absolute(absolute_path + ".uid")
-			print("- got deleted ", cls)
-
-
 func prepare_component(component: TwitchGenComponent) -> void:
 	if component._is_root:
-		var base_name: String = get_base_name(component._classname)
-
+		var base_name = get_base_name(component._classname)
+		
 		# No suffix class lives by its own
 		if base_name == component._classname:
 			if grouped_files.has(base_name):
 				push_error("That file shouldn't exist: %s" % base_name)
 			component._classname = "Twitch" + component._classname
-			grouped_files[base_name.to_lower()] = component
+			grouped_files[base_name] = component
 		else:
-			var file: GroupedComponent = grouped_files.get_or_add(base_name.to_lower(), GroupedComponent.new())
+			var file: GroupedComponent = grouped_files.get(base_name, GroupedComponent.new())
 			file.base_name = "Twitch" + base_name
 			file.components.append(component)
+			grouped_files[base_name] = file
 			component._classname = component._classname.trim_prefix(base_name)
-			component._fqdn = func(): return file.base_name + "." + component._classname
+			component.set_meta("fqdn", file.base_name + "." + component._classname)
 			var sub_components_to_update: Array[TwitchGenComponent] = component._sub_components.values().duplicate()
 			for sub_component in sub_components_to_update:
 				sub_component._classname = component._classname + sub_component._classname
 				sub_components_to_update.append_array(sub_component._sub_components.values())
-
-
-## Return array of the filenames in the folder
-func get_all_classes(folder: String) -> PackedStringArray:
-	return DirAccess.get_files_at(folder)
+	pass
+	
+	
+	
+func generate_api() -> void:
+	for component: Variant in parser.components:
+		prepare_component(component)
+	
+	# Generate TwitchAPI
+	var twitch_api_code = twitch_api_header
+	for method: TwitchGenMethod in parser.methods:
+		twitch_api_code += method_code(method)
+	write_output_file(api_output_path + "twitch_api.gd", twitch_api_code)
+	
+	# Generate Components
+	for component: Variant in grouped_files.values():
+		var code = ""
+		if component is GroupedComponent:
+			code = group_code(component)
+		else:
+			code = component_code(component, 0)
+		write_output_file(api_output_path + component.get_filename(), code)
+	
+	print("API regenerated you can find it under: %s" % api_output_path)
 
 
 class GroupedComponent extends RefCounted:
 	var base_name: String
 	var prefix: String
 	var components: Array[TwitchGenComponent] = []
-
-
+	
+	
 	func _update_base_name(val: String) -> void:
 		base_name = val
 
@@ -231,7 +197,7 @@ class_name {name}
 		code += "\n\n"
 		code += component_code(component, 1)
 	return code
-
+	
 #region Field Code Generation
 
 func field_declaration(field: TwitchGenField) -> String:
@@ -239,11 +205,10 @@ func field_declaration(field: TwitchGenField) -> String:
 	return """
 ## {description}
 @export var {name}: {type}:
-	set(val):
+	set(val): 
 		{name} = val
-		track_data(&"{original_name}", val)\n""".format({
+		track_data(&"{name}", val)\n""".format({
 			"name": field._name,
-			"original_name": field._original_name,
 			"description": ident(field._description, 0, "## "),
 			"type": type
 		})
@@ -279,7 +244,7 @@ func parameter_array(method: TwitchGenMethod, with_type: bool = false, fully_qua
 	var parameters : Array[String] = []
 	if method._contains_body: parameters.append(get_parameter("body", method._body_type, false, with_type, fully_qualified))
 	if method._contains_optional: parameters.append(get_parameter("opt", method.get_optional_type(), false, with_type, fully_qualified))
-
+				
 	method._parameters.sort_custom(TwitchGenParameter.sort)
 	for parameter: TwitchGenParameter in method._required_parameters:
 		parameters.append(get_parameter(parameter._name, parameter._type, parameter._is_array, with_type, fully_qualified))
@@ -288,15 +253,15 @@ func parameter_array(method: TwitchGenMethod, with_type: bool = false, fully_qua
 
 func method_parameter(method: TwitchGenMethod, with_type: bool = false, fully_qualified: bool = false) -> String:
 	return ", ".join(parameter_array(method, with_type, fully_qualified))
-
-
+	
+	
 func path_code(method: TwitchGenMethod) -> String:
-	var body_code : String = "var path: String = \"%s?\"\n" % method._path
-
+	var body_code : String = "var path = \"%s?\"\n" % method._path
+	
 	if method._contains_optional:
 		body_code += "var optionals: Dictionary[StringName, Variant] = {}\n"
 		body_code += "if opt != null: optionals = opt.to_dict()\n"
-
+		
 	for parameter: TwitchGenParameter in method._parameters:
 		if parameter._required:
 			body_code += parameter_path_code(parameter) + "\n"
@@ -304,23 +269,23 @@ func path_code(method: TwitchGenMethod) -> String:
 			body_code += "if optionals.has(\"%s\"):\n" % parameter._name
 			body_code += "\t%s\n" % ident(parameter_path_code(parameter, "optionals."), 1)
 	return body_code
-
-
+	
+	
 func parameter_path_code(parameter: TwitchGenParameter, prefix: String = "") -> String:
 	var body: String
 	if parameter._is_time:
 		body = "path += \"{key}=\" + get_rfc_3339_date_format({value}) + \"&\""
-
+			
 	elif parameter._is_array:
 		body = """
 for param in {value}:
 	path += "{key}=" + str(param) + "&" """.trim_prefix("\n\t")
 	else:
 		body = "path += \"{key}=\" + str({value}) + \"&\""
-
-	return body.format({
+				
+	return body.format({ 
 		'value': prefix + parameter._name,
-		'key': parameter._name
+		'key': parameter._name 
 	})
 
 	## Exceptional method cause twitch api is not uniform
@@ -334,7 +299,7 @@ if parsed_result.data.pagination != null:
 func paging_code(method: TwitchGenMethod) -> String:
 	if method._name == "get_channel_stream_schedule":
 		return paging_code_stream_schedule()
-
+		
 	var code: String = ""
 	code += "if parsed_result.pagination != null:\n"
 	var after_parameter: TwitchGenParameter = method.get_parameter_by_name("after")
@@ -350,55 +315,45 @@ func paging_code(method: TwitchGenMethod) -> String:
 	if after_parameter._required:
 		code += "\t{parameter} = cursor\n"
 	else:
-		code += "\tif not opt: opt = {opt_type}.new()\n"
 		code += "\topt.{parameter} = cursor\n"
 	code += "\tparsed_result._next_page = {name}.bind({parameters})\n"
-
-	var opt_parameter: String = get_type(method.get_optional_type(), false, true)
+	
 	return code.format({
 		"parameter": after_parameter._name,
 		"name": method._name,
-		"parameters": method_parameter(method),
-		"opt_type": opt_parameter
+		"parameters": method_parameter(method)
 	})
 
 
-func method_code(method: TwitchGenMethod) -> String:
+func response_code(method: TwitchGenMethod) -> String:
+	var code: String = ""
 	var result_type = get_type(method._result_type, false, true)
+	if result_type != "BufferedHTTPClient.ResponseData":
+		code = """
+var result: Variant = JSON.parse_string(response.response_data.get_string_from_utf8())
+var parsed_result: {result_type} = {result_type}.from_json(result)
+parsed_result.response = response
+""".format({ 'result_type': result_type })
+		if method._has_paging: code += paging_code(method)
+		code += "return parsed_result"
+	else:
+		code = "return response"
+	return code
 
-	var template = """
 
+func method_code(method: TwitchGenMethod) -> String:
+	return """
+	
 ## {summary}
-##
+## 
 {parameter_doc}
 ##
 ## {doc_url}
 func {name}({parameters}) -> {result_type}:
 	{path_code}
 	var response: BufferedHTTPClient.ResponseData = await request(path, HTTPClient.METHOD_{method}, {body_variable}, "{content_type}")
-"""
-
-	if result_type == "BufferedHTTPClient.ResponseData":
-		template += """
-	if response.response_code >= 400:
-		_handle_error("{name}", response)
-	return response
-"""
-	else:
-		template += """
-	var result: Variant = {}
-	if response.response_code >= 400:
-		_handle_error("{name}", response)
-	else:
-		result = JSON.parse_string(response.response_data.get_string_from_utf8())
-
-	var parsed_result: {result_type} = {result_type}.from_json(result)
-	parsed_result.response = response
-	{paging_code}
-	return parsed_result
-"""
-
-	return template.format({
+	{response_code}
+""".format({
 			"summary": method._summary,
 			"parameter_doc": parameter_doc(method),
 			"doc_url": method._doc_url,
@@ -409,7 +364,7 @@ func {name}({parameters}) -> {result_type}:
 			"content_type": get_type(method._content_type, false, true),
 			"method": method._http_verb.to_upper(),
 			"body_variable": "body" if method._contains_body else "\"\"",
-			"paging_code": ident(paging_code(method), 1) if method._has_paging else ""
+			"response_code": ident(response_code(method), 1),
 		})
 
 
@@ -439,33 +394,33 @@ class {classname} extends TwitchData:
 	var class_code : String = ""
 	for field: TwitchGenField in component._fields:
 		class_code += field_declaration(field)
-
+		
 	if component._is_response:
 		class_code += "var response: BufferedHTTPClient.ResponseData"
 	class_code += "\n\n"
 	class_code += create_code(component) + "\n\n"
 	class_code += from_json_code(component)
-
+	
 	if component._has_paging:
 		class_code += "\n\n" + iter_code(component)
-
+		
 	var sub_component_code: String
 	for sub_component in component._sub_components.values():
 		sub_component_code += "\n\n" + component_code(sub_component, 1)
-
+	
 	return code.format({
 		"description": ident(component._description, 0, "## "),
 		"classname": component._classname,
 		"ref": component._ref
 	}) + ident(class_code, level) + sub_component_code
-
-
+	
+	
 func create_code(component: TwitchGenComponent) -> String:
 	var parameters: Array[String] = []
 	for field in component._fields:
 		if field._is_required:
 			parameters.append("_" + get_parameter(field._name, field._type, field._is_array))
-
+	
 	var variable_name = component._classname.to_snake_case()
 	var code : String = """
 ## Constructor with all required fields.
@@ -475,7 +430,7 @@ static func create({parameters}) -> {classname}:
 			"classname": component._classname,
 			"variablename": variable_name
 		})
-
+	
 	for field in component._fields:
 		if field._is_required:
 			code += "\t{classname}.{name} = _{name}\n".format({
@@ -485,48 +440,43 @@ static func create({parameters}) -> {classname}:
 
 	code += "\treturn %s" % variable_name
 	return code
-
-
+		
+	
 func from_json_code(component: TwitchGenComponent) -> String:
 	var code : String = """
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> {classname}:
 	var result: {classname} = {classname}.new()
 """.format({"classname": component._classname})
 	for field: TwitchGenField in component._fields:
-		code += "\tif d.get(\"{original_name}\", null) != null:\n"
+		code += "\tif d.get(\"{name}\", null) != null:\n"
 		if field._is_typed_array:
 			code += """
-		for value in d["{original_name}"]:
+		for value in d["{name}"]:
 			result.{name}.append({type}.from_json(value))\n""".lstrip("\n")
-			code += "\t\tresult.track_data(&\"{original_name}\", result.{name})\n"
 		elif field._is_array:
 			code += """
-		for value in d["{original_name}"]:
+		for value in d["{name}"]:
 			result.{name}.append(value)\n""".lstrip("\n")
-			code += "\t\tresult.track_data(&\"{original_name}\", result.{name})\n"
 		elif field._is_sub_class:
-			code += "\t\tresult.{name} = {type}.from_json(d[\"{original_name}\"])\n"
+			code += "\t\tresult.{name} = {type}.from_json(d[\"{name}\"])\n"
 		else:
-			code += "\t\tresult.{name} = d[\"{original_name}\"]\n"
-
+			code += "\t\tresult.{name} = d[\"{name}\"]\n"
 		code = code.format({
 			"name": field._name,
-			"original_name": field._original_name,
 			"type": get_type(field._type, false)
 		})
 	code += "\treturn result\n"
-
+	
 	return code
-
-
+		
+		
 func iter_code(component: TwitchGenComponent) -> String:
 	var data_variable_name: String = "data"
 	var path_to_data: String = ""
 	if component._ref == "#/components/schemas/GetChannelStreamScheduleResponse/Data":
 		data_variable_name = "segments"
 		path_to_data = "data."
-
+		
 	var code: String
 	if component._ref == "#/components/schemas/GetExtensionLiveChannelsResponse":
 		code += """
@@ -541,7 +491,7 @@ func _has_pagination() -> bool:
 	if pagination.cursor == null || pagination.cursor == "": return false
 	return true
 """
-
+		
 	code += """
 var _next_page: Callable
 var _cur_iter: int = 0
@@ -558,21 +508,20 @@ func next_page() -> {response_type}:
 func _iter_init(iter: Array) -> bool:
 	if {data_variable_name}.is_empty(): return false
 	iter[0] = {data_variable_name}[0]
-	_cur_iter = 1
-	return true
-
-
+	return {data_variable_name}.size() > 0
+	
+	
 func _iter_next(iter: Array) -> bool:
-	if {data_variable_name}.size() > _cur_iter:
-		iter[0] = {data_variable_name}[_cur_iter]
+	if {data_variable_name}.size() - 1 > _cur_iter:
 		_cur_iter += 1
-	elif not _has_pagination():
+		iter[0] = {data_variable_name}[_cur_iter]
+	if {data_variable_name}.size() - 1 == _cur_iter && not _has_pagination(): 
 		return false
 	return true
-
-
+	
+	
 func _iter_get(iter: Variant) -> Variant:
-	if {data_variable_name}.size() == _cur_iter && _has_pagination():
+	if {data_variable_name}.size() - 1 == _cur_iter && _has_pagination():
 		await next_page()
 	return iter"""
 	var copy_code: String
@@ -594,7 +543,9 @@ func get_type(type: String, is_array: bool = false, full_qualified: bool = false
 	var result_type : String = ""
 	if type.begins_with("#"):
 		var component: TwitchGenComponent = parser.get_component_by_ref(type)
-		result_type = component._classname if not full_qualified else component._fqdn.call()
+		result_type = component._classname
+		if full_qualified and component.has_meta("fqdn"):
+			result_type = component.get_meta("fqdn")
 	else:
 		result_type = type
 	return result_type if not is_array else "Array[%s]" % result_type
@@ -612,23 +563,23 @@ func ident(code: String, level: int, padding: String = "") -> String:
 
 # Writes the processed content to the output file.
 func write_output_file(file_output: String, content: String) -> void:
-	var file: FileAccess = FileAccess.open(file_output, FileAccess.WRITE);
+	var file = FileAccess.open(file_output, FileAccess.WRITE);
 	if file == null:
-		var error_message: String = error_string(FileAccess.get_open_error());
+		var error_message = error_string(FileAccess.get_open_error());
 		push_error("Failed to open output file: %s\n%s" % [file_output, error_message])
 		return
-	file.store_string(content + "\n")
+	file.store_string(content)
 	file.flush()
 	file.close()
-
-
+	
+	
 func get_base_name(file: String) -> String:
 	var new_file: String = file
 	for suffix: String in suffixes:
 		new_file = new_file.trim_suffix(suffix)
 	return new_file
-
-
+	
+	
 func get_parameter(title: String, type: String, is_array = false, with_type: bool = true, fully_qualified: bool = false) -> String:
 	if with_type:
 		return "{name}: {type}".format({
@@ -637,5 +588,5 @@ func get_parameter(title: String, type: String, is_array = false, with_type: boo
 		})
 	else:
 		return title
-
+		
 #endregion

@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## A list that contains the charity campaign that the broadcaster is currently running. The list is empty if the broadcaster is not running a charity campaign; the campaign information is not available after the campaign ends.
 	@export var data: Array[TwitchCharityCampaign]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -26,12 +26,10 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchCharityCampaign.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	

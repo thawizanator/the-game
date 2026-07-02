@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## A list that contains information about the available content classification labels.
 	@export var data: Array[TwitchContentClassificationLabel]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -26,13 +26,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchContentClassificationLabel.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -44,7 +42,7 @@ class Opt extends TwitchData:
 	## Locale for the Content Classification Labels. You may specify a maximum of 1 locale. Default: `“en-US”`  
 	## Supported locales: `"bg-BG", "cs-CZ", "da-DK", "da-DK", "de-DE", "el-GR", "en-GB", "en-US", "es-ES", "es-MX", "fi-FI", "fr-FR", "hu-HU", "it-IT", "ja-JP", "ko-KR", "nl-NL", "no-NO", "pl-PL", "pt-BT", "pt-PT", "ro-RO", "ru-RU", "sk-SK", "sv-SE", "th-TH", "tr-TR", "vi-VN", "zh-CN", "zh-TW"`
 	@export var locale: String:
-		set(val):
+		set(val): 
 			locale = val
 			track_data(&"locale", val)
 	
@@ -56,7 +54,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("locale", null) != null:

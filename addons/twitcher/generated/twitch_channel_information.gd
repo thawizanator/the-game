@@ -9,70 +9,70 @@ class_name TwitchChannelInformation
 	
 ## An ID that uniquely identifies the broadcaster.
 @export var broadcaster_id: String:
-	set(val):
+	set(val): 
 		broadcaster_id = val
 		track_data(&"broadcaster_id", val)
 
 ## The broadcaster’s login name.
 @export var broadcaster_login: String:
-	set(val):
+	set(val): 
 		broadcaster_login = val
 		track_data(&"broadcaster_login", val)
 
 ## The broadcaster’s display name.
 @export var broadcaster_name: String:
-	set(val):
+	set(val): 
 		broadcaster_name = val
 		track_data(&"broadcaster_name", val)
 
 ## The broadcaster’s preferred language. The value is an ISO 639-1 two-letter language code (for example, _en_ for English). The value is set to “other” if the language is not a Twitch supported language.
 @export var broadcaster_language: String:
-	set(val):
+	set(val): 
 		broadcaster_language = val
 		track_data(&"broadcaster_language", val)
 
 ## The name of the game that the broadcaster is playing or last played. The value is an empty string if the broadcaster has never played a game.
 @export var game_name: String:
-	set(val):
+	set(val): 
 		game_name = val
 		track_data(&"game_name", val)
 
 ## An ID that uniquely identifies the game that the broadcaster is playing or last played. The value is an empty string if the broadcaster has never played a game.
 @export var game_id: String:
-	set(val):
+	set(val): 
 		game_id = val
 		track_data(&"game_id", val)
 
 ## The title of the stream that the broadcaster is currently streaming or last streamed. The value is an empty string if the broadcaster has never streamed.
 @export var title: String:
-	set(val):
+	set(val): 
 		title = val
 		track_data(&"title", val)
 
 ## The value of the broadcaster’s stream delay setting, in seconds. This field’s value defaults to zero unless 1) the request specifies a user access token, 2) the ID in the _broadcaster\_id_ query parameter matches the user ID in the access token, and 3) the broadcaster has partner status and they set a non-zero stream delay value.
 @export var delay: int:
-	set(val):
+	set(val): 
 		delay = val
 		track_data(&"delay", val)
 
 ## The tags applied to the channel.
 @export var tags: Array[String]:
-	set(val):
+	set(val): 
 		tags = val
 		track_data(&"tags", val)
 
 ## The CCLs applied to the channel.
 @export var content_classification_labels: Array[String]:
-	set(val):
+	set(val): 
 		content_classification_labels = val
 		track_data(&"content_classification_labels", val)
 
 ## Boolean flag indicating if the channel has branded content.
 @export var is_branded_content: bool:
-	set(val):
+	set(val): 
 		is_branded_content = val
 		track_data(&"is_branded_content", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -92,7 +92,6 @@ static func create(_broadcaster_id: String, _broadcaster_login: String, _broadca
 	return twitch_channel_information
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchChannelInformation:
 	var result: TwitchChannelInformation = TwitchChannelInformation.new()
 	if d.get("broadcaster_id", null) != null:
@@ -114,12 +113,9 @@ static func from_json(d: Dictionary) -> TwitchChannelInformation:
 	if d.get("tags", null) != null:
 		for value in d["tags"]:
 			result.tags.append(value)
-		result.track_data(&"tags", result.tags)
 	if d.get("content_classification_labels", null) != null:
 		for value in d["content_classification_labels"]:
 			result.content_classification_labels.append(value)
-		result.track_data(&"content_classification_labels", result.content_classification_labels)
 	if d.get("is_branded_content", null) != null:
 		result.is_branded_content = d["is_branded_content"]
 	return result
-

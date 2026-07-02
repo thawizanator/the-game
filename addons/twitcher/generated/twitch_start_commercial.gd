@@ -13,16 +13,16 @@ class Body extends TwitchData:
 
 	## The ID of the partner or affiliate broadcaster that wants to run the commercial. This ID must match the user ID found in the OAuth token.
 	@export var broadcaster_id: String:
-		set(val):
+		set(val): 
 			broadcaster_id = val
 			track_data(&"broadcaster_id", val)
 	
 	## The length of the commercial to run, in seconds. Twitch tries to serve a commercial that’s the requested length, but it may be shorter or longer. The maximum length you should request is 180 seconds.
 	@export var length: int:
-		set(val):
+		set(val): 
 			length = val
 			track_data(&"length", val)
-	
+	var response: BufferedHTTPClient.ResponseData
 	
 	
 	## Constructor with all required fields.
@@ -33,7 +33,6 @@ class Body extends TwitchData:
 		return body
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Body:
 		var result: Body = Body.new()
 		if d.get("broadcaster_id", null) != null:
@@ -50,7 +49,7 @@ class Response extends TwitchData:
 
 	## An array that contains a single object with the status of your start commercial request.
 	@export var data: Array[ResponseData]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -63,13 +62,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(ResponseData.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -80,22 +77,22 @@ class ResponseData extends TwitchData:
 
 	## The length of the commercial you requested. If you request a commercial that’s longer than 180 seconds, the API uses 180 seconds.
 	@export var length: int:
-		set(val):
+		set(val): 
 			length = val
 			track_data(&"length", val)
 	
 	## A message that indicates whether Twitch was able to serve an ad.
 	@export var message: String:
-		set(val):
+		set(val): 
 			message = val
 			track_data(&"message", val)
 	
 	## The number of seconds you must wait before running another commercial.
 	@export var retry_after: int:
-		set(val):
+		set(val): 
 			retry_after = val
 			track_data(&"retry_after", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -107,7 +104,6 @@ class ResponseData extends TwitchData:
 		return response_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseData:
 		var result: ResponseData = ResponseData.new()
 		if d.get("length", null) != null:

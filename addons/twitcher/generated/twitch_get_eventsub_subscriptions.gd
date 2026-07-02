@@ -7,142 +7,6 @@ class_name TwitchGetEventsubSubscriptions
 	
 
 
-## 
-## #/components/schemas/GetEventSubSubscriptionsResponse
-class Response extends TwitchData:
-
-	## The list of subscriptions. The list is ordered by the oldest subscription first. The list is empty if the client hasn't created subscriptions or there are no subscriptions that match the specified filter criteria.
-	@export var data: Array[TwitchEventSubSubscription]:
-		set(val):
-			data = val
-			track_data(&"data", val)
-	
-	## The total number of subscriptions that you've created.
-	@export var total: int:
-		set(val):
-			total = val
-			track_data(&"total", val)
-	
-	## The sum of all of your subscription costs. [Learn More](https://dev.twitch.tv/docs/eventsub/manage-subscriptions/#subscription-limits)
-	@export var total_cost: int:
-		set(val):
-			total_cost = val
-			track_data(&"total_cost", val)
-	
-	## The maximum total cost that you're allowed to incur for all subscriptions that you create.
-	@export var max_total_cost: int:
-		set(val):
-			max_total_cost = val
-			track_data(&"max_total_cost", val)
-	
-	## An object that contains the cursor used to get the next page of subscriptions. The object is empty if there are no more pages to get. The number of subscriptions returned per page is undertermined.
-	@export var pagination: ResponsePagination:
-		set(val):
-			pagination = val
-			track_data(&"pagination", val)
-	var response: BufferedHTTPClient.ResponseData
-	
-	
-	## Constructor with all required fields.
-	static func create(_data: Array[TwitchEventSubSubscription], _total: int, _total_cost: int, _max_total_cost: int) -> Response:
-		var response: Response = Response.new()
-		response.data = _data
-		response.total = _total
-		response.total_cost = _total_cost
-		response.max_total_cost = _max_total_cost
-		return response
-	
-	
-	## Used to transform responses to the current object
-	static func from_json(d: Dictionary) -> Response:
-		var result: Response = Response.new()
-		if d.get("data", null) != null:
-			for value in d["data"]:
-				result.data.append(TwitchEventSubSubscription.from_json(value))
-			result.track_data(&"data", result.data)
-		if d.get("total", null) != null:
-			result.total = d["total"]
-		if d.get("total_cost", null) != null:
-			result.total_cost = d["total_cost"]
-		if d.get("max_total_cost", null) != null:
-			result.max_total_cost = d["max_total_cost"]
-		if d.get("pagination", null) != null:
-			result.pagination = ResponsePagination.from_json(d["pagination"])
-		return result
-	
-	
-	
-	func _has_pagination() -> bool:
-		if pagination == null: return false
-		if pagination.cursor == null || pagination.cursor == "": return false
-		return true
-	
-	var _next_page: Callable
-	var _cur_iter: int = 0
-	
-	
-	func next_page() -> Response:
-		var response: Response = await _next_page.call()
-		_cur_iter = 0
-		_next_page = response._next_page
-		data = response.data
-		total = response.total
-		total_cost = response.total_cost
-		max_total_cost = response.max_total_cost
-		pagination = response.pagination
-	
-		return response
-	
-	
-	func _iter_init(iter: Array) -> bool:
-		if data.is_empty(): return false
-		iter[0] = data[0]
-		_cur_iter = 1
-		return true
-	
-	
-	func _iter_next(iter: Array) -> bool:
-		if data.size() > _cur_iter:
-			iter[0] = data[_cur_iter]
-			_cur_iter += 1
-		elif not _has_pagination():
-			return false
-		return true
-	
-	
-	func _iter_get(iter: Variant) -> Variant:
-		if data.size() == _cur_iter && _has_pagination():
-			await next_page()
-		return iter
-
-
-## An object that contains the cursor used to get the next page of subscriptions. The object is empty if there are no more pages to get. The number of subscriptions returned per page is undertermined.
-## #/components/schemas/GetEventSubSubscriptionsResponse/Pagination
-class ResponsePagination extends TwitchData:
-
-	## The cursor value that you set the _after_ query parameter to.
-	@export var cursor: String:
-		set(val):
-			cursor = val
-			track_data(&"cursor", val)
-	var response: BufferedHTTPClient.ResponseData
-	
-	
-	## Constructor with all required fields.
-	static func create() -> ResponsePagination:
-		var response_pagination: ResponsePagination = ResponsePagination.new()
-		return response_pagination
-	
-	
-	## Used to transform responses to the current object
-	static func from_json(d: Dictionary) -> ResponsePagination:
-		var result: ResponsePagination = ResponsePagination.new()
-		if d.get("cursor", null) != null:
-			result.cursor = d["cursor"]
-		return result
-	
-
-
 ## All optional parameters for TwitchAPI.get_eventsub_subscriptions
 ## #/components/schemas/GetEventsubSubscriptionsOpt
 class Opt extends TwitchData:
@@ -168,31 +32,25 @@ class Opt extends TwitchData:
 	## * websocket\_network\_error — The Twitch WebSocket server experienced a network error writing the message to the client.
 	## * websocket\_failed\_to\_reconnect - The client failed to reconnect to the Twitch WebSocket server within the required time after a Reconnect Message.
 	@export var status: String:
-		set(val):
+		set(val): 
 			status = val
 			track_data(&"status", val)
 	
 	## Filter subscriptions by subscription type. For a list of subscription types, see [Subscription Types](https://dev.twitch.tv/docs/eventsub/eventsub-subscription-types#subscription-types).
 	@export var type: String:
-		set(val):
+		set(val): 
 			type = val
 			track_data(&"type", val)
 	
 	## Filter subscriptions by user ID. The response contains subscriptions where this ID matches a user ID that you specified in the **Condition** object when you [created the subscription](https://dev.twitch.tv/docs/api/reference#create-eventsub-subscription).
 	@export var user_id: String:
-		set(val):
+		set(val): 
 			user_id = val
 			track_data(&"user_id", val)
 	
-	## Returns an array with the subscription matching the ID (as long as it is owned by the client making the request), or an empty array if there is no matching subscription.
-	@export var subscription_id: String:
-		set(val):
-			subscription_id = val
-			track_data(&"subscription_id", val)
-	
 	## The cursor used to get the next page of results. The `pagination` object in the response contains the cursor's value.
 	@export var after: String:
-		set(val):
+		set(val): 
 			after = val
 			track_data(&"after", val)
 	
@@ -204,7 +62,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("status", null) != null:
@@ -213,8 +70,6 @@ class Opt extends TwitchData:
 			result.type = d["type"]
 		if d.get("user_id", null) != null:
 			result.user_id = d["user_id"]
-		if d.get("subscription_id", null) != null:
-			result.subscription_id = d["subscription_id"]
 		if d.get("after", null) != null:
 			result.after = d["after"]
 		return result

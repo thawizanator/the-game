@@ -9,22 +9,22 @@ class_name TwitchContentClassificationLabel
 	
 ## Unique identifier for the CCL.
 @export var id: String:
-	set(val):
+	set(val): 
 		id = val
 		track_data(&"id", val)
 
 ## Localized description of the CCL.
 @export var description: String:
-	set(val):
+	set(val): 
 		description = val
 		track_data(&"description", val)
 
 ## Localized name of the CCL.
 @export var name: String:
-	set(val):
+	set(val): 
 		name = val
 		track_data(&"name", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -36,7 +36,6 @@ static func create(_id: String, _description: String, _name: String) -> TwitchCo
 	return twitch_content_classification_label
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchContentClassificationLabel:
 	var result: TwitchContentClassificationLabel = TwitchContentClassificationLabel.new()
 	if d.get("id", null) != null:
@@ -46,4 +45,3 @@ static func from_json(d: Dictionary) -> TwitchContentClassificationLabel:
 	if d.get("name", null) != null:
 		result.name = d["name"]
 	return result
-

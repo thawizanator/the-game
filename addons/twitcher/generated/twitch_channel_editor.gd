@@ -9,22 +9,22 @@ class_name TwitchChannelEditor
 	
 ## An ID that uniquely identifies a user with editor permissions.
 @export var user_id: String:
-	set(val):
+	set(val): 
 		user_id = val
 		track_data(&"user_id", val)
 
 ## The user’s display name.
 @export var user_name: String:
-	set(val):
+	set(val): 
 		user_name = val
 		track_data(&"user_name", val)
 
 ## The date and time, in RFC3339 format, when the user became one of the broadcaster’s editors.
 @export var created_at: String:
-	set(val):
+	set(val): 
 		created_at = val
 		track_data(&"created_at", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -36,7 +36,6 @@ static func create(_user_id: String, _user_name: String, _created_at: String) ->
 	return twitch_channel_editor
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchChannelEditor:
 	var result: TwitchChannelEditor = TwitchChannelEditor.new()
 	if d.get("user_id", null) != null:
@@ -46,4 +45,3 @@ static func from_json(d: Dictionary) -> TwitchChannelEditor:
 	if d.get("created_at", null) != null:
 		result.created_at = d["created_at"]
 	return result
-

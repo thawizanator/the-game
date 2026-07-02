@@ -9,124 +9,124 @@ class_name TwitchCustomReward
 	
 ## The ID that uniquely identifies the broadcaster.
 @export var broadcaster_id: String:
-	set(val):
+	set(val): 
 		broadcaster_id = val
 		track_data(&"broadcaster_id", val)
 
 ## The broadcaster’s login name.
 @export var broadcaster_login: String:
-	set(val):
+	set(val): 
 		broadcaster_login = val
 		track_data(&"broadcaster_login", val)
 
 ## The broadcaster’s display name.
 @export var broadcaster_name: String:
-	set(val):
+	set(val): 
 		broadcaster_name = val
 		track_data(&"broadcaster_name", val)
 
 ## The ID that uniquely identifies this custom reward.
 @export var id: String:
-	set(val):
+	set(val): 
 		id = val
 		track_data(&"id", val)
 
 ## The title of the reward.
 @export var title: String:
-	set(val):
+	set(val): 
 		title = val
 		track_data(&"title", val)
 
 ## The prompt shown to the viewer when they redeem the reward if user input is required. See the `is_user_input_required` field.
 @export var prompt: String:
-	set(val):
+	set(val): 
 		prompt = val
 		track_data(&"prompt", val)
 
 ## The cost of the reward in Channel Points.
 @export var cost: int:
-	set(val):
+	set(val): 
 		cost = val
 		track_data(&"cost", val)
 
 ## A set of custom images for the reward. This field is **null** if the broadcaster didn’t upload images.
 @export var image: TwitchImage:
-	set(val):
+	set(val): 
 		image = val
 		track_data(&"image", val)
 
 ## A set of default images for the reward.
 @export var default_image: DefaultImage:
-	set(val):
+	set(val): 
 		default_image = val
 		track_data(&"default_image", val)
 
 ## The background color to use for the reward. The color is in Hex format (for example, #00E5CB).
 @export var background_color: String:
-	set(val):
+	set(val): 
 		background_color = val
 		track_data(&"background_color", val)
 
 ## A Boolean value that determines whether the reward is enabled. Is **true** if enabled; otherwise, **false**. Disabled rewards aren’t shown to the user.
 @export var is_enabled: bool:
-	set(val):
+	set(val): 
 		is_enabled = val
 		track_data(&"is_enabled", val)
 
 ## A Boolean value that determines whether the user must enter information when they redeem the reward. Is **true** if the user is prompted.
 @export var is_user_input_required: bool:
-	set(val):
+	set(val): 
 		is_user_input_required = val
 		track_data(&"is_user_input_required", val)
 
 ## The settings used to determine whether to apply a maximum to the number of redemptions allowed per live stream.
 @export var max_per_stream_setting: MaxPerStreamSetting:
-	set(val):
+	set(val): 
 		max_per_stream_setting = val
 		track_data(&"max_per_stream_setting", val)
 
 ## The settings used to determine whether to apply a maximum to the number of redemptions allowed per user per live stream.
 @export var max_per_user_per_stream_setting: MaxPerUserPerStreamSetting:
-	set(val):
+	set(val): 
 		max_per_user_per_stream_setting = val
 		track_data(&"max_per_user_per_stream_setting", val)
 
 ## The settings used to determine whether to apply a cooldown period between redemptions and the length of the cooldown.
 @export var global_cooldown_setting: GlobalCooldownSetting:
-	set(val):
+	set(val): 
 		global_cooldown_setting = val
 		track_data(&"global_cooldown_setting", val)
 
 ## A Boolean value that determines whether the reward is currently paused. Is **true** if the reward is paused. Viewers can’t redeem paused rewards.
 @export var is_paused: bool:
-	set(val):
+	set(val): 
 		is_paused = val
 		track_data(&"is_paused", val)
 
 ## A Boolean value that determines whether the reward is currently in stock. Is **true** if the reward is in stock. Viewers can’t redeem out of stock rewards.
 @export var is_in_stock: bool:
-	set(val):
+	set(val): 
 		is_in_stock = val
 		track_data(&"is_in_stock", val)
 
 ## A Boolean value that determines whether redemptions should be set to FULFILLED status immediately when a reward is redeemed. If **false**, status is set to UNFULFILLED and follows the normal request queue process.
 @export var should_redemptions_skip_request_queue: bool:
-	set(val):
+	set(val): 
 		should_redemptions_skip_request_queue = val
 		track_data(&"should_redemptions_skip_request_queue", val)
 
 ## The number of redemptions redeemed during the current live stream. The number counts against the `max_per_stream_setting` limit. This field is **null** if the broadcaster’s stream isn’t live or _max\_per\_stream\_setting_ isn’t enabled.
 @export var redemptions_redeemed_current_stream: int:
-	set(val):
+	set(val): 
 		redemptions_redeemed_current_stream = val
 		track_data(&"redemptions_redeemed_current_stream", val)
 
 ## The timestamp of when the cooldown period expires. Is **null** if the reward isn’t in a cooldown state. See the `global_cooldown_setting` field.
 @export var cooldown_expires_at: String:
-	set(val):
+	set(val): 
 		cooldown_expires_at = val
 		track_data(&"cooldown_expires_at", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -155,7 +155,6 @@ static func create(_broadcaster_id: String, _broadcaster_login: String, _broadca
 	return twitch_custom_reward
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchCustomReward:
 	var result: TwitchCustomReward = TwitchCustomReward.new()
 	if d.get("broadcaster_id", null) != null:
@@ -208,19 +207,19 @@ class TwitchImage extends TwitchData:
 
 	## The URL to a small version of the image.
 	@export var url_1x: String:
-		set(val):
+		set(val): 
 			url_1x = val
 			track_data(&"url_1x", val)
 	
 	## The URL to a medium version of the image.
 	@export var url_2x: String:
-		set(val):
+		set(val): 
 			url_2x = val
 			track_data(&"url_2x", val)
 	
 	## The URL to a large version of the image.
 	@export var url_4x: String:
-		set(val):
+		set(val): 
 			url_4x = val
 			track_data(&"url_4x", val)
 	
@@ -235,7 +234,6 @@ class TwitchImage extends TwitchData:
 		return twitch_image
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> TwitchImage:
 		var result: TwitchImage = TwitchImage.new()
 		if d.get("url_1x", null) != null:
@@ -254,19 +252,19 @@ class DefaultImage extends TwitchData:
 
 	## The URL to a small version of the image.
 	@export var url_1x: String:
-		set(val):
+		set(val): 
 			url_1x = val
 			track_data(&"url_1x", val)
 	
 	## The URL to a medium version of the image.
 	@export var url_2x: String:
-		set(val):
+		set(val): 
 			url_2x = val
 			track_data(&"url_2x", val)
 	
 	## The URL to a large version of the image.
 	@export var url_4x: String:
-		set(val):
+		set(val): 
 			url_4x = val
 			track_data(&"url_4x", val)
 	
@@ -281,7 +279,6 @@ class DefaultImage extends TwitchData:
 		return default_image
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> DefaultImage:
 		var result: DefaultImage = DefaultImage.new()
 		if d.get("url_1x", null) != null:
@@ -300,13 +297,13 @@ class MaxPerStreamSetting extends TwitchData:
 
 	## A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per live stream. Is **true** if the reward applies a limit.
 	@export var is_enabled: bool:
-		set(val):
+		set(val): 
 			is_enabled = val
 			track_data(&"is_enabled", val)
 	
 	## The maximum number of redemptions allowed per live stream.
 	@export var max_per_stream: int:
-		set(val):
+		set(val): 
 			max_per_stream = val
 			track_data(&"max_per_stream", val)
 	
@@ -320,7 +317,6 @@ class MaxPerStreamSetting extends TwitchData:
 		return max_per_stream_setting
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> MaxPerStreamSetting:
 		var result: MaxPerStreamSetting = MaxPerStreamSetting.new()
 		if d.get("is_enabled", null) != null:
@@ -337,13 +333,13 @@ class MaxPerUserPerStreamSetting extends TwitchData:
 
 	## A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per user per live stream. Is **true** if the reward applies a limit.
 	@export var is_enabled: bool:
-		set(val):
+		set(val): 
 			is_enabled = val
 			track_data(&"is_enabled", val)
 	
 	## The maximum number of redemptions allowed per user per live stream.
 	@export var max_per_user_per_stream: int:
-		set(val):
+		set(val): 
 			max_per_user_per_stream = val
 			track_data(&"max_per_user_per_stream", val)
 	
@@ -357,7 +353,6 @@ class MaxPerUserPerStreamSetting extends TwitchData:
 		return max_per_user_per_stream_setting
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> MaxPerUserPerStreamSetting:
 		var result: MaxPerUserPerStreamSetting = MaxPerUserPerStreamSetting.new()
 		if d.get("is_enabled", null) != null:
@@ -374,13 +369,13 @@ class GlobalCooldownSetting extends TwitchData:
 
 	## A Boolean value that determines whether to apply a cooldown period. Is **true** if a cooldown period is enabled.
 	@export var is_enabled: bool:
-		set(val):
+		set(val): 
 			is_enabled = val
 			track_data(&"is_enabled", val)
 	
 	## The cooldown period, in seconds.
 	@export var global_cooldown_seconds: int:
-		set(val):
+		set(val): 
 			global_cooldown_seconds = val
 			track_data(&"global_cooldown_seconds", val)
 	
@@ -394,7 +389,6 @@ class GlobalCooldownSetting extends TwitchData:
 		return global_cooldown_setting
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> GlobalCooldownSetting:
 		var result: GlobalCooldownSetting = GlobalCooldownSetting.new()
 		if d.get("is_enabled", null) != null:

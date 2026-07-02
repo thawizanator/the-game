@@ -13,7 +13,7 @@ class Opt extends TwitchData:
 
 	## The slot to move this user assignment to. If the destination slot is occupied, the user assigned will be swapped into `source_slot_id`.
 	@export var destination_slot_id: String:
-		set(val):
+		set(val): 
 			destination_slot_id = val
 			track_data(&"destination_slot_id", val)
 	
@@ -25,7 +25,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("destination_slot_id", null) != null:

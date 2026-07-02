@@ -13,22 +13,22 @@ class Body extends TwitchData:
 
 	## The message. The message may contain a maximum of 280 characters.
 	@export var text: String:
-		set(val):
+		set(val): 
 			text = val
 			track_data(&"text", val)
 	
 	## The ID of the extension that’s sending the chat message.
 	@export var extension_id: String:
-		set(val):
+		set(val): 
 			extension_id = val
 			track_data(&"extension_id", val)
 	
 	## The extension’s version number.
 	@export var extension_version: String:
-		set(val):
+		set(val): 
 			extension_version = val
 			track_data(&"extension_version", val)
-	
+	var response: BufferedHTTPClient.ResponseData
 	
 	
 	## Constructor with all required fields.
@@ -40,7 +40,6 @@ class Body extends TwitchData:
 		return body
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Body:
 		var result: Body = Body.new()
 		if d.get("text", null) != null:

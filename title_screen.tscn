@@ -1,12 +1,13 @@
 [gd_scene format=3 uid="uid://b4o3pfgb6xpt5"]
 
 [ext_resource type="Script" uid="uid://ct3g5vshkxvt7" path="res://title_screen.gd" id="1_05l2w"]
-[ext_resource type="Texture2D" uid="uid://bx3fvkutb6rip" path="res://images/studio002.png" id="1_ig5kc"]
 [ext_resource type="FontFile" uid="uid://c8fr33nqjgb3x" path="res://fonts/PressStart2P-Regular.ttf" id="2_05l2w"]
+[ext_resource type="Texture2D" uid="uid://bbjtdguj5e70f" path="res://images/bgimg003.png" id="2_jqemp"]
 [ext_resource type="Theme" uid="uid://dubua3p8axxng" path="res://buttons.tres" id="3_hafda"]
 [ext_resource type="FontFile" uid="uid://unb0bwdtrssh" path="res://fonts/Pixel Game.otf" id="5_hafda"]
 [ext_resource type="Theme" uid="uid://bxauvt75nc8qv" path="res://Title.tres" id="6_jqemp"]
 [ext_resource type="Theme" uid="uid://khkur3uktc7b" path="res://Text.tres" id="7_013yr"]
+[ext_resource type="Texture2D" uid="uid://bb2slrj0uamp5" path="res://images/twitchlogo.png" id="8_013yr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tpml5"]
 bg_color = Color(0.1612511, 0.16125113, 0.16125101, 1)
@@ -32,6 +33,31 @@ content_margin_left = 20.0
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rhgbh"]
 content_margin_left = 20.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xfn3p"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.011764706, 0, 0.26666668, 0.85490197)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.07450981, 0.8784314, 0.9882353, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="Theme" id="Theme_8vmu4"]
+VBoxContainer/constants/separation = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_013yr"]
+draw_center = false
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_8vmu4"]
+
 [node name="TitleScreen" type="Control" unique_id=1739366575]
 layout_mode = 3
 anchors_preset = 15
@@ -42,12 +68,17 @@ grow_vertical = 2
 script = ExtResource("1_05l2w")
 
 [node name="Background" type="TextureRect" parent="." unique_id=1678545294]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("1_ig5kc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_jqemp")
+expand_mode = 3
 
 [node name="MainMenuContainer" type="VBoxContainer" parent="." unique_id=1581199903]
+visible = false
 layout_mode = 0
 offset_left = 256.0
 offset_top = 111.0
@@ -164,6 +195,7 @@ text = "Back to Title"
 alignment = 2
 
 [node name="PlayerContainer" type="PanelContainer" parent="." unique_id=796255730]
+visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -328,6 +360,57 @@ layout_mode = 2
 
 [node name="GSTitle" type="Label" parent="GameSettingsContainer/GSVbox" unique_id=626511869]
 layout_mode = 2
+
+[node name="TwitchPanelContainer" type="PanelContainer" parent="." unique_id=1403357108]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -360.0
+offset_top = -298.0
+offset_right = -60.0
+offset_bottom = -148.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_xfn3p")
+metadata/_edit_group_ = true
+
+[node name="tsVboxTwitch" type="VBoxContainer" parent="TwitchPanelContainer" unique_id=905430011]
+layout_mode = 2
+theme = SubResource("Theme_8vmu4")
+
+[node name="TwitchLogo" type="TextureRect" parent="TwitchPanelContainer/tsVboxTwitch" unique_id=1124037227]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("8_013yr")
+expand_mode = 1
+
+[node name="TwitchStatusLabel" type="Label" parent="TwitchPanelContainer/tsVboxTwitch" unique_id=177126359]
+layout_mode = 2
+size_flags_vertical = 0
+theme = ExtResource("7_013yr")
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxFlat_013yr")
+text = "Not Linked 🔗"
+horizontal_alignment = 1
+
+[node name="twitch_info" type="Label" parent="TwitchPanelContainer/tsVboxTwitch" unique_id=1124857187]
+layout_mode = 2
+theme = ExtResource("7_013yr")
+theme_override_styles/normal = SubResource("StyleBoxLine_8vmu4")
+text = "(click to link account)"
+horizontal_alignment = 1
+
+[node name="TwitchConnectBtn" type="Button" parent="TwitchPanelContainer/tsVboxTwitch" unique_id=1160674698]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "🔐 Connect Twitch Account"
 
 [connection signal="pressed" from="MainMenuContainer/HostBtn" to="." method="_on_host_btn_pressed"]
 [connection signal="pressed" from="MainMenuContainer/PlayerBtn" to="." method="_on_player_btn_pressed"]

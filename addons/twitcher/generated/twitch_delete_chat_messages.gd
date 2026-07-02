@@ -19,7 +19,7 @@ class Opt extends TwitchData:
 	##   
 	## If not specified, the request removes all messages in the broadcaster’s chat room.
 	@export var message_id: String:
-		set(val):
+		set(val): 
 			message_id = val
 			track_data(&"message_id", val)
 	
@@ -31,7 +31,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("message_id", null) != null:

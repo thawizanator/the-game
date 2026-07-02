@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## 
 	@export var data: Array[ResponseData]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -26,13 +26,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(ResponseData.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -43,67 +41,67 @@ class ResponseData extends TwitchData:
 
 	## Unban request ID.
 	@export var id: String:
-		set(val):
+		set(val): 
 			id = val
 			track_data(&"id", val)
 	
 	## User ID of broadcaster whose channel is receiving the unban request.
 	@export var broadcaster_id: String:
-		set(val):
+		set(val): 
 			broadcaster_id = val
 			track_data(&"broadcaster_id", val)
 	
 	## The broadcaster’s login name.
 	@export var broadcaster_login: String:
-		set(val):
+		set(val): 
 			broadcaster_login = val
 			track_data(&"broadcaster_login", val)
 	
 	## The broadcaster’s display name.
 	@export var broadcaster_name: String:
-		set(val):
+		set(val): 
 			broadcaster_name = val
 			track_data(&"broadcaster_name", val)
 	
 	## User ID of moderator who approved/denied the request.
 	@export var moderator_id: String:
-		set(val):
+		set(val): 
 			moderator_id = val
 			track_data(&"moderator_id", val)
 	
 	## The moderator’s login name.
 	@export var moderator_login: String:
-		set(val):
+		set(val): 
 			moderator_login = val
 			track_data(&"moderator_login", val)
 	
 	## The moderator’s display name.
 	@export var moderator_name: String:
-		set(val):
+		set(val): 
 			moderator_name = val
 			track_data(&"moderator_name", val)
 	
 	## User ID of the requestor who is asking for an unban.
 	@export var user_id: String:
-		set(val):
+		set(val): 
 			user_id = val
 			track_data(&"user_id", val)
 	
 	## The user’s login name.
 	@export var user_login: String:
-		set(val):
+		set(val): 
 			user_login = val
 			track_data(&"user_login", val)
 	
 	## The user’s display name.
 	@export var user_name: String:
-		set(val):
+		set(val): 
 			user_name = val
 			track_data(&"user_name", val)
 	
 	## Text of the request from the requesting user.
 	@export var text: String:
-		set(val):
+		set(val): 
 			text = val
 			track_data(&"text", val)
 	
@@ -112,28 +110,28 @@ class ResponseData extends TwitchData:
 	## * approved
 	## * denied
 	@export var status: String:
-		set(val):
+		set(val): 
 			status = val
 			track_data(&"status", val)
 	
 	## Timestamp of when the unban request was created.
 	@export var created_at: String:
-		set(val):
+		set(val): 
 			created_at = val
 			track_data(&"created_at", val)
 	
 	## Timestamp of when moderator/broadcaster approved or denied the request.
 	@export var resolved_at: String:
-		set(val):
+		set(val): 
 			resolved_at = val
 			track_data(&"resolved_at", val)
 	
 	## Text input by the resolver (moderator) of the unban request.
 	@export var resolution_text: String:
-		set(val):
+		set(val): 
 			resolution_text = val
 			track_data(&"resolution_text", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -157,7 +155,6 @@ class ResponseData extends TwitchData:
 		return response_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseData:
 		var result: ResponseData = ResponseData.new()
 		if d.get("id", null) != null:
@@ -200,7 +197,7 @@ class Opt extends TwitchData:
 
 	## Message supplied by the unban request resolver. The message is limited to a maximum of 500 characters.
 	@export var resolution_text: String:
-		set(val):
+		set(val): 
 			resolution_text = val
 			track_data(&"resolution_text", val)
 	
@@ -212,7 +209,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("resolution_text", null) != null:

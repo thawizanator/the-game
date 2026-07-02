@@ -1,8 +1,5 @@
 extends RefCounted
 
-
-## Technically deprecated by TwitchESChannelChatMessage but because it's one of the most used 
-## classes it will probably live until Twitcher 3.0
 class_name TwitchChatMessage
 
 enum FragmentType {
@@ -12,14 +9,14 @@ enum FragmentType {
 	mention = 3
 }
 
-const FRAGMENT_TYPES: PackedStringArray = ["text", "cheermote", "emote", "mention"]
+const FRAGMENT_TYPES = ["text", "cheermote", "emote", "mention"]
 
 enum EmoteFormat {
 	animated = 0,
 	_static = 1
 }
 
-const EMOTE_FORMATES: PackedStringArray = ["animated", "static"]
+const EMOTE_FORMATES = ["animated", "static"]
 
 enum MessageType {
 	## Normal chat message
@@ -36,7 +33,7 @@ enum MessageType {
 	power_ups_gigantified_emote = 5
 }
 
-const MESSAGE_TYPES: PackedStringArray = ["text", "channel_points_highlighted", "channel_points_sub_only", "user_intro", "power_ups_message_effect", "power_ups_gigantified_emote"]
+const MESSAGE_TYPES = ["text", "channel_points_highlighted", "channel_points_sub_only", "user_intro", "power_ups_message_effect", "power_ups_gigantified_emote"]
 
 class Message extends RefCounted:
 	## The chat message in plain text.
@@ -57,7 +54,7 @@ class Message extends RefCounted:
 
 class Fragment extends RefCounted:
 	## The type of message fragment. See "TwitchChatMessage.FRAGMENT_TYPE_*"
-	var type: FragmentType
+	var type: MessageType
 	## Message text in fragment.
 	var text: String
 	## Optional. Metadata pertaining to the cheermote.
@@ -112,15 +109,8 @@ class Cheermote extends RefCounted:
 	var tier: int
 
 
-	func get_sprite_frames(_media_loader: TwitchMediaLoader, 
-			scale: StringName = TwitchCheermoteDefinition.SCALE_1, 
-			theme: StringName = TwitchCheermoteDefinition.THEME_DARK,
-			type: StringName = TwitchCheermoteDefinition.TYPE_STATIC) -> SpriteFrames:
-		var cheermote_definition: TwitchCheermoteDefinition = TwitchCheermoteDefinition.new(prefix, str(tier))
-		cheermote_definition.scale = scale
-		cheermote_definition.theme = theme
-		cheermote_definition.type = type
-		var cheer_results: TwitchMediaLoader.CheerResult = await _media_loader.get_cheer_info(cheermote_definition)
+	func get_sprite_frames(_media_loader: TwitchMediaLoader, cheermote_definition: TwitchCheermoteDefinition) -> SpriteFrames:
+		var cheer_results = await _media_loader.get_cheer_tier(prefix, "%s" % tier, cheermote_definition.theme, cheermote_definition.type, cheermote_definition.scale)
 		return cheer_results.spriteframes
 
 
@@ -149,14 +139,15 @@ class Emote extends RefCounted:
 	## Resolves the spriteframes from this emote. Check `format` for possible formats.
 	## Format: Defaults to animated when not available it uses static
 	## Scale: 1, 2, 3
-	func get_sprite_frames(_media_loader: TwitchMediaLoader, 
-			scale: int = TwitchEmoteDefinition.SCALE_1, 
-			theme: StringName = TwitchEmoteDefinition.THEME_DARK, 
-			type: StringName = TwitchEmoteDefinition.TYPE_DEFAULT) -> SpriteFrames:
+	func get_sprite_frames(_media_loader: TwitchMediaLoader, format: String = "", scale: int = 1, dark: bool = true) -> SpriteFrames:
 		var definition: TwitchEmoteDefinition = TwitchEmoteDefinition.new(id)
-		definition.scale = scale
-		definition.theme = theme
-		definition.type = type
+		if dark: definition.theme_dark()
+		else: definition.theme_light()
+		match scale:
+			1: definition.scale_1()
+			2: definition.scale_2()
+			3: definition.scale_3()
+			_: definition.scale_1()
 		var emotes = await _media_loader.get_emotes_by_definition([definition])
 		return emotes[definition]
 
@@ -341,7 +332,7 @@ static func from_json(d: Dictionary) -> TwitchChatMessage:
 
 
 ## Key: TwitchBadgeDefinition | Value: SpriteFrames
-func get_badges(_media_loader: TwitchMediaLoader, scale: int = TwitchBadgeDefinition.SCALE_1) -> Dictionary[TwitchBadgeDefinition, SpriteFrames]:
+func get_badges(_media_loader: TwitchMediaLoader, scale: int = 1) -> Dictionary[TwitchBadgeDefinition, SpriteFrames]:
 	var definitions : Array[TwitchBadgeDefinition] = []
 	for badge in badges:
 		var badge_definition : TwitchBadgeDefinition = TwitchBadgeDefinition.new(badge.set_id, badge.id, scale, broadcaster_user_id)
@@ -351,7 +342,7 @@ func get_badges(_media_loader: TwitchMediaLoader, scale: int = TwitchBadgeDefini
 
 
 ## Key: TwitchBadgeDefinition | Value: SpriteFrames
-func get_source_badges(_media_loader: TwitchMediaLoader, scale: int = TwitchBadgeDefinition.SCALE_1) -> Dictionary[TwitchBadgeDefinition, SpriteFrames]:
+func get_source_badges(_media_loader: TwitchMediaLoader, scale: int = 1) -> Dictionary[TwitchBadgeDefinition, SpriteFrames]:
 	var definitions : Array[TwitchBadgeDefinition] = []
 	for badge in source_badges:
 		var badge_definition : TwitchBadgeDefinition = TwitchBadgeDefinition.new(badge.set_id, badge.id, scale, broadcaster_user_id)
@@ -365,18 +356,12 @@ func get_color(default_color: String = "#AAAAAA") -> String:
 
 
 ## Preload all emojis in parallel to reduce loadtime
-func load_emotes_from_fragment(_media_loader: TwitchMediaLoader, 
-		scale: int = TwitchEmoteDefinition.SCALE_1,
-		theme: StringName = TwitchEmoteDefinition.THEME_DARK, 
-		type: StringName = TwitchEmoteDefinition.TYPE_DEFAULT) -> Dictionary[TwitchEmoteDefinition, SpriteFrames]:
+func load_emotes_from_fragment(_media_loader: TwitchMediaLoader) -> void:
 	var emotes_to_load : Array[TwitchEmoteDefinition] = []
 	
 	for fragment : TwitchChatMessage.Fragment in message.fragments:
 		match fragment.type:
 			TwitchChatMessage.FragmentType.emote:
 				var definition : TwitchEmoteDefinition = TwitchEmoteDefinition.new(fragment.emote.id)
-				definition.scale = scale
-				definition.theme = theme
-				definition.type = type
 				emotes_to_load.append(definition)
-	return await _media_loader.get_emotes_by_definition(emotes_to_load)
+	var emotes = await _media_loader.get_emotes_by_definition(emotes_to_load)

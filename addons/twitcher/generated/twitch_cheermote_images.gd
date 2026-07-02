@@ -9,16 +9,16 @@ class_name TwitchCheermoteImages
 	
 ## 
 @export var light: TwitchCheermoteImageTheme:
-	set(val):
+	set(val): 
 		light = val
 		track_data(&"light", val)
 
 ## 
 @export var dark: TwitchCheermoteImageTheme:
-	set(val):
+	set(val): 
 		dark = val
 		track_data(&"dark", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -27,7 +27,6 @@ static func create() -> TwitchCheermoteImages:
 	return twitch_cheermote_images
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchCheermoteImages:
 	var result: TwitchCheermoteImages = TwitchCheermoteImages.new()
 	if d.get("light", null) != null:
@@ -35,4 +34,3 @@ static func from_json(d: Dictionary) -> TwitchCheermoteImages:
 	if d.get("dark", null) != null:
 		result.dark = TwitchCheermoteImageTheme.from_json(d["dark"])
 	return result
-

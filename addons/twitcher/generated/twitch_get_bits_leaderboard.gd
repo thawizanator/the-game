@@ -13,19 +13,19 @@ class Response extends TwitchData:
 
 	## A list of leaderboard leaders. The leaders are returned in rank order by how much they’ve cheered. The array is empty if nobody has cheered bits.
 	@export var data: Array[TwitchBitsLeaderboard]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	
 	## The reporting window’s start and end dates, in RFC3339 format. The dates are calculated by using the _started\_at_ and _period_ query parameters. If you don’t specify the _started\_at_ query parameter, the fields contain empty strings.
 	@export var date_range: ResponseDateRange:
-		set(val):
+		set(val): 
 			date_range = val
 			track_data(&"date_range", val)
 	
 	## The number of ranked users in `data`. This is the value in the _count_ query parameter or the total number of entries on the leaderboard, whichever is less.
 	@export var total: int:
-		set(val):
+		set(val): 
 			total = val
 			track_data(&"total", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -40,13 +40,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchBitsLeaderboard.from_json(value))
-			result.track_data(&"data", result.data)
 		if d.get("date_range", null) != null:
 			result.date_range = ResponseDateRange.from_json(d["date_range"])
 		if d.get("total", null) != null:
@@ -61,16 +59,16 @@ class ResponseDateRange extends TwitchData:
 
 	## The reporting window’s start date.
 	@export var started_at: String:
-		set(val):
+		set(val): 
 			started_at = val
 			track_data(&"started_at", val)
 	
 	## The reporting window’s end date.
 	@export var ended_at: String:
-		set(val):
+		set(val): 
 			ended_at = val
 			track_data(&"ended_at", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -81,7 +79,6 @@ class ResponseDateRange extends TwitchData:
 		return response_date_range
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseDateRange:
 		var result: ResponseDateRange = ResponseDateRange.new()
 		if d.get("started_at", null) != null:
@@ -98,7 +95,7 @@ class Opt extends TwitchData:
 
 	## The number of results to return. The minimum count is 1 and the maximum is 100\. The default is 10.
 	@export var count: int:
-		set(val):
+		set(val): 
 			count = val
 			track_data(&"count", val)
 	
@@ -110,7 +107,7 @@ class Opt extends TwitchData:
 	## * year — A year spans from 00:00:00 on the first day of the year specified in _started\_at_ and runs through 00:00:00 of the first day of the next year.
 	## * all — Default. The lifetime of the broadcaster's channel.
 	@export var period: String:
-		set(val):
+		set(val): 
 			period = val
 			track_data(&"period", val)
 	
@@ -120,13 +117,13 @@ class Opt extends TwitchData:
 	##   
 	## If your start date uses the ‘+’ offset operator (for example, `2022-01-01T00:00:00.0+05:00`), you must URL encode the start date.
 	@export var started_at: String:
-		set(val):
+		set(val): 
 			started_at = val
 			track_data(&"started_at", val)
 	
 	## An ID that identifies a user that cheered bits in the channel. If _count_ is greater than 1, the response may include users ranked above and below the specified user. To get the leaderboard’s top leaders, don’t specify a user ID.
 	@export var user_id: String:
-		set(val):
+		set(val): 
 			user_id = val
 			track_data(&"user_id", val)
 	
@@ -138,7 +135,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("count", null) != null:

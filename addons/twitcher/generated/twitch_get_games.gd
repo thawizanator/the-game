@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## The list of categories and games. The list is empty if the specified categories and games weren’t found.
 	@export var data: Array[TwitchGame]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -26,13 +26,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchGame.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -43,19 +41,19 @@ class Opt extends TwitchData:
 
 	## The ID of the category or game to get. Include this parameter for each category or game you want to get. For example, `&id=1234&id=5678`. You may specify a maximum of 100 IDs. The endpoint ignores duplicate and invalid IDs or IDs that weren’t found.
 	@export var id: Array[String]:
-		set(val):
+		set(val): 
 			id = val
 			track_data(&"id", val)
 	
 	## The name of the category or game to get. The name must exactly match the category’s or game’s title. Include this parameter for each category or game you want to get. For example, `&name=foo&name=bar`. You may specify a maximum of 100 names. The endpoint ignores duplicate names and names that weren’t found.
 	@export var name: Array[String]:
-		set(val):
+		set(val): 
 			name = val
 			track_data(&"name", val)
 	
 	## The [IGDB](https://www.igdb.com/) ID of the game to get. Include this parameter for each game you want to get. For example, `&igdb_id=1234&igdb_id=5678`. You may specify a maximum of 100 IDs. The endpoint ignores duplicate and invalid IDs or IDs that weren’t found.
 	@export var igdb_id: Array[String]:
-		set(val):
+		set(val): 
 			igdb_id = val
 			track_data(&"igdb_id", val)
 	
@@ -67,20 +65,16 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("id", null) != null:
 			for value in d["id"]:
 				result.id.append(value)
-			result.track_data(&"id", result.id)
 		if d.get("name", null) != null:
 			for value in d["name"]:
 				result.name.append(value)
-			result.track_data(&"name", result.name)
 		if d.get("igdb_id", null) != null:
 			for value in d["igdb_id"]:
 				result.igdb_id.append(value)
-			result.track_data(&"igdb_id", result.igdb_id)
 		return result
 	

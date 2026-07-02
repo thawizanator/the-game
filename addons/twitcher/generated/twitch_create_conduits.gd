@@ -13,10 +13,10 @@ class Body extends TwitchData:
 
 	## The number of shards to create for this conduit.
 	@export var shard_count: int:
-		set(val):
+		set(val): 
 			shard_count = val
 			track_data(&"shard_count", val)
-	
+	var response: BufferedHTTPClient.ResponseData
 	
 	
 	## Constructor with all required fields.
@@ -26,7 +26,6 @@ class Body extends TwitchData:
 		return body
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Body:
 		var result: Body = Body.new()
 		if d.get("shard_count", null) != null:
@@ -41,7 +40,7 @@ class Response extends TwitchData:
 
 	## List of information about the client’s conduits.
 	@export var data: Array[ResponseData]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -54,13 +53,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(ResponseData.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -71,16 +68,16 @@ class ResponseData extends TwitchData:
 
 	## Conduit ID.
 	@export var id: String:
-		set(val):
+		set(val): 
 			id = val
 			track_data(&"id", val)
 	
 	## Number of shards created for this conduit.
 	@export var shard_count: int:
-		set(val):
+		set(val): 
 			shard_count = val
 			track_data(&"shard_count", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -91,7 +88,6 @@ class ResponseData extends TwitchData:
 		return response_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseData:
 		var result: ResponseData = ResponseData.new()
 		if d.get("id", null) != null:

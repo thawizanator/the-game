@@ -13,7 +13,7 @@ class Body extends TwitchData:
 
 	## A list of IDs that identify the entitlements to update. You may specify a maximum of 100 IDs.
 	@export var entitlement_ids: Array[String]:
-		set(val):
+		set(val): 
 			entitlement_ids = val
 			track_data(&"entitlement_ids", val)
 	
@@ -22,10 +22,10 @@ class Body extends TwitchData:
 	## * CLAIMED — The user claimed the benefit.
 	## * FULFILLED — The developer granted the benefit that the user claimed.
 	@export var fulfillment_status: String:
-		set(val):
+		set(val): 
 			fulfillment_status = val
 			track_data(&"fulfillment_status", val)
-	
+	var response: BufferedHTTPClient.ResponseData
 	
 	
 	## Constructor with all required fields.
@@ -34,13 +34,11 @@ class Body extends TwitchData:
 		return body
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Body:
 		var result: Body = Body.new()
 		if d.get("entitlement_ids", null) != null:
 			for value in d["entitlement_ids"]:
 				result.entitlement_ids.append(value)
-			result.track_data(&"entitlement_ids", result.entitlement_ids)
 		if d.get("fulfillment_status", null) != null:
 			result.fulfillment_status = d["fulfillment_status"]
 		return result
@@ -53,7 +51,7 @@ class Response extends TwitchData:
 
 	## A list that indicates which entitlements were successfully updated and those that weren’t.
 	@export var data: Array[TwitchDropsEntitlementUpdated]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -66,12 +64,10 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchDropsEntitlementUpdated.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	

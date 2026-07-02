@@ -2,71 +2,40 @@
 extends Button
 
 const TwitchTweens = preload("res://addons/twitcher/editor/twitch_tweens.gd")
-const TwitchEditorSettings = preload("res://addons/twitcher/editor/twitch_editor_settings.gd")
 
-var oauth_setting: OAuthSetting: set = update_oauth_setting
-var oauth_token: OAuthToken: set = update_oauth_token
+@export var oauth_setting: OAuthSetting: set = update_oauth_setting
+@export var oauth_token: OAuthToken: set = update_oauth_token
 @export var test_response: Label
 
-var scopes: OAuthScopes
-
-signal authorized
-
+@onready var twitch_auth: TwitchAuth = %TwitchAuth
 
 func _ready() -> void:
-	if not oauth_setting:
-		oauth_setting = TwitchEditorSettings.editor_oauth_setting
-	if not oauth_token:
-		oauth_token = TwitchEditorSettings.editor_oauth_token
-
-
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_PREDELETE:
-		oauth_token.authorized.disconnect(_on_authorized)
+	pressed.connect(_pressed)
+	update_oauth_setting(oauth_setting)
+	update_oauth_token(oauth_token)
 
 
 func _pressed() -> void:
-	if test_response:
-		set_test_response("Authorizing...")
-
 	TwitchTweens.loading(self)
-	await TwitchAuth.manual_authorize(
-		oauth_setting,
-		oauth_token,
-		true,
-		scopes)
-
-	if oauth_token.is_token_valid():
-		set_test_response("Credentials are valid!", Color.GREEN)
+	await twitch_auth.authorize()
+	
+	if twitch_auth.token.is_token_valid():
+		test_response.text = "Credentials are valid!"
+		test_response.add_theme_color_override(&"font_color", Color.GREEN)
 		TwitchTweens.flash(self, Color.GREEN)
-		authorized.emit()
 	else:
-		set_test_response("Credentials are invalid!", Color.RED)
+		test_response.text = "Credentials are invalid!"
+		test_response.add_theme_color_override(&"font_color", Color.RED)
 		TwitchTweens.flash(self, Color.RED)
 
 
-func set_test_response(info: String, color: Color = Color.TRANSPARENT) -> void:
-	if test_response:
-		test_response.text = info
-		if color == Color.TRANSPARENT:
-			test_response.remove_theme_color_override(&"font_color")
-		else:
-			test_response.add_theme_color_override(&"font_color", color)
-
-
 func update_oauth_token(new_oauth_token: OAuthToken) -> void:
-	if oauth_token && oauth_token.authorized.is_connected(_on_authorized):
-		oauth_token.authorized.disconnect(_on_authorized)
-
 	oauth_token = new_oauth_token
-	if not oauth_token.authorized.is_connected(_on_authorized):
-		oauth_token.authorized.connect(_on_authorized)
+	if is_inside_tree():
+		twitch_auth.token = new_oauth_token
 
 
 func update_oauth_setting(new_oauth_setting: OAuthSetting) -> void:
 	oauth_setting = new_oauth_setting
-	disabled = not oauth_setting.is_valid()
-
-
-func _on_authorized() -> void:
-	if is_inside_tree(): authorized.emit()
+	if is_inside_tree():
+		twitch_auth.oauth_setting = oauth_setting

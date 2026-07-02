@@ -13,13 +13,13 @@ class Body extends TwitchData:
 
 	## The ID of the broadcaster that’s running the poll. This ID must match the user ID in the user access token.
 	@export var broadcaster_id: String:
-		set(val):
+		set(val): 
 			broadcaster_id = val
 			track_data(&"broadcaster_id", val)
 	
 	## The ID of the poll to update.
 	@export var id: String:
-		set(val):
+		set(val): 
 			id = val
 			track_data(&"id", val)
 	
@@ -28,10 +28,10 @@ class Body extends TwitchData:
 	## * TERMINATED — Ends the poll before the poll is scheduled to end. The poll remains publicly visible.
 	## * ARCHIVED — Ends the poll before the poll is scheduled to end, and then archives it so it's no longer publicly visible.
 	@export var status: String:
-		set(val):
+		set(val): 
 			status = val
 			track_data(&"status", val)
-	
+	var response: BufferedHTTPClient.ResponseData
 	
 	
 	## Constructor with all required fields.
@@ -43,7 +43,6 @@ class Body extends TwitchData:
 		return body
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Body:
 		var result: Body = Body.new()
 		if d.get("broadcaster_id", null) != null:
@@ -62,7 +61,7 @@ class Response extends TwitchData:
 
 	## A list that contains the poll that you ended.
 	@export var data: Array[TwitchPoll]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -75,12 +74,10 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchPoll.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	

@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## A list of Bits products that the extension created. The list is in ascending SKU order. The list is empty if the extension hasn’t created any products or they’re all expired or disabled.
 	@export var data: Array[TwitchExtensionBitsProduct]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -26,13 +26,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchExtensionBitsProduct.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -43,7 +41,7 @@ class Opt extends TwitchData:
 
 	## A Boolean value that determines whether to include disabled or expired Bits products in the response. The default is **false**.
 	@export var should_include_all: bool:
-		set(val):
+		set(val): 
 			should_include_all = val
 			track_data(&"should_include_all", val)
 	
@@ -55,7 +53,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("should_include_all", null) != null:

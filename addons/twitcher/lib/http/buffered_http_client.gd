@@ -30,10 +30,6 @@ class RequestData extends RefCounted:
 	## Amount of retries
 	var retry: int
 
-	## When you are done free the request
-	func queue_free() -> void:
-		http_request.queue_free()
-
 
 ## Contains the response data
 class ResponseData extends RefCounted:
@@ -50,21 +46,15 @@ class ResponseData extends RefCounted:
 	## Had the response an error
 	var error: bool
 
-	## When you are done free the request
-	func queue_free() -> void:
-		request_data.queue_free()
-
-## When a request fails max_error_count then cancel that request -1 for endless amount of tries.
-@export var max_error_count : int = -1
-@export var custom_header : Dictionary[String, String] = { "Accept": "*/*" }
-
 var requests : Array[RequestData] = []
 var current_request : RequestData
 var current_response_data : PackedByteArray = PackedByteArray()
+
+var custom_header : Dictionary = { "Accept": "*/*" }
 var responses : Dictionary = {}
 var error_count : int
-
-
+## When a request fails max_error_count then cancel that request -1 for endless amount of tries.
+var max_error_count : int = -1
 ## Only one poll at a time so block for all other tries to call it
 var polling: bool
 var processing: bool:
@@ -100,9 +90,7 @@ func request(path: String, method: int, headers: Dictionary, body: String) -> Re
 func wait_for_request(request_data: RequestData) -> ResponseData:
 	if responses.has(request_data):
 		var response = responses[request_data]
-		requests.erase(request_data)
 		responses.erase(request_data)
-		request_data.queue_free()
 		logDebug("response cached return directly from wait")
 		return response
 
@@ -110,9 +98,7 @@ func wait_for_request(request_data: RequestData) -> ResponseData:
 	while (latest_response == null || request_data != latest_response.request_data):
 		latest_response = await request_done
 	logDebug("response received return from wait")
-	requests.erase(request_data)
 	responses.erase(request_data)
-	request_data.queue_free()
 	return latest_response
 
 
@@ -128,12 +114,12 @@ func _on_request_completed(result: int, response_code: int, headers: PackedStrin
 		var wait_time = pow(2, request_data.retry)
 		wait_time = min(wait_time, 30)
 		logDebug("Error happend during connection. Wait for %s" % wait_time)
-		await get_tree().create_timer(wait_time, true, false, true).timeout
+		await get_tree().create_timer(wait_time).timeout
 		var http_request: HTTPRequest = request_data.http_request.duplicate()
 		add_child(http_request)
 		request_data.http_request = http_request
 		request_data.retry += 1
-		http_request.request(request_data.path, _pack_headers(request_data.headers), request_data.method, request_data.body)
+		http_request.request(request_data.url, _pack_headers(request_data.headers), request_data.method, request_data.body)
 		http_request.request_completed.connect(_on_request_completed.bind(http_request))
 
 	response_data.result = result
@@ -172,7 +158,7 @@ func _pack_headers(headers: Dictionary) -> PackedStringArray:
 
 ## The amount of requests that are pending
 func queued_request_size() -> int:
-	var requests_size: int = requests.size()
+	var requests_size = requests.size()
 	if current_request != null:
 		requests_size += 1
 	return requests_size

@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## A list that contains information about the channel’s snoozes and next upcoming ad after successfully snoozing.
 	@export var data: Array[ResponseData]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -26,13 +26,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(ResponseData.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -43,26 +41,26 @@ class ResponseData extends TwitchData:
 
 	## The number of snoozes available for the broadcaster.
 	@export var snooze_count: int:
-		set(val):
+		set(val): 
 			snooze_count = val
 			track_data(&"snooze_count", val)
 	
-	## The UTC timestamp when the broadcaster will gain an additional snooze, in RFC3339 format. Can be `0`.
-	@export var snooze_refresh_at: int:
-		set(val):
+	## The UTC timestamp when the broadcaster will gain an additional snooze, in RFC3339 format.
+	@export var snooze_refresh_at: String:
+		set(val): 
 			snooze_refresh_at = val
 			track_data(&"snooze_refresh_at", val)
 	
-	## The UTC timestamp of the broadcaster’s next scheduled ad, in RFC3339 format. `0` if the channel has no ad scheduled or is not live.
-	@export var next_ad_at: int:
-		set(val):
+	## The UTC timestamp of the broadcaster’s next scheduled ad, in RFC3339 format.
+	@export var next_ad_at: String:
+		set(val): 
 			next_ad_at = val
 			track_data(&"next_ad_at", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
-	static func create(_snooze_count: int, _snooze_refresh_at: int, _next_ad_at: int) -> ResponseData:
+	static func create(_snooze_count: int, _snooze_refresh_at: String, _next_ad_at: String) -> ResponseData:
 		var response_data: ResponseData = ResponseData.new()
 		response_data.snooze_count = _snooze_count
 		response_data.snooze_refresh_at = _snooze_refresh_at
@@ -70,7 +68,6 @@ class ResponseData extends TwitchData:
 		return response_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseData:
 		var result: ResponseData = ResponseData.new()
 		if d.get("snooze_count", null) != null:

@@ -7,10 +7,10 @@ extends Control
 
 var is_loaded: bool = false
 
-# Define the percentage of the monitor size you want (e.g., 0.6 for 60%)
+# Define the percentage of the monitor size you want (e.g., 0.9 for 90%)
 const SCREEN_PERCENTAGE = 0.9
 
-# Custom Rich text layout for your warning sequence [cite: 1206, 1212]
+# Custom Rich text layout for your warning sequence
 const WARNING_TEXT = (
 	"⚠️ SYSTEM WARNING & LIABILITY WAIVER ⚠️\n\n" +
 	"This is an unstable educational test build. The engine is heavily broken as we are learning " +
@@ -27,7 +27,6 @@ const WARNING_TEXT = (
 
 func _ready() -> void:
 	# 1. SCALE AND CENTER THE WINDOW
-	# Get the primary monitor's total resolution
 	var monitor_size = DisplayServer.screen_get_size()
 	
 	# Calculate the target window size based on the percentage
@@ -43,13 +42,13 @@ func _ready() -> void:
 	var window_pos = screen_center - (Vector2i(target_width, target_height) / 2)
 	DisplayServer.window_set_position(window_pos)
 	
-	
+	# Set baseline readout properties
 	version_label.text = GlobalSystem.dev_build_version
 	loading_bar.value = 0
-	status_label.text = "Handshaking with TV Switchboard Server..."
+	status_label.text = "Initializing Game Studio Environment..."
 	disclaimer_text.text = WARNING_TEXT
 	
-	# Simulate connection timer delay [cite: 2368, 2380]
+	# Simulate connection timer delay
 	var timer = Timer.new()
 	timer.wait_time = 0.05
 	timer.autostart = true
@@ -62,7 +61,7 @@ func _on_loading_tick(timer: Timer) -> void:
 	else:
 		timer.stop()
 		is_loaded = true
-		status_label.text = "🟢 HANDSHAKE COMPLETED. PRESS SPACEBAR TO RISK ENTRY..."
+		status_label.text = "🟢 SYSTEM READY. PRESS SPACEBAR TO RISK ENTRY..."
 
 # MASTER INPUT PROCESSOR: Bypasses container focus completely
 func _input(event):
@@ -71,7 +70,7 @@ func _input(event):
 		print("☢️ EMERGENCY FAIL-SAFE TRIPPED! Closing environment down...")
 		get_tree().quit()
 		
-	# 2. Proceed Loop [cite: 2268, 2269]
+	# 2. Proceed Loop
 	if is_loaded and event.is_action_pressed("ui_accept"):
 		status_label.text = "Launching Main Title Studio..."
 		await get_tree().create_timer(0.3).timeout

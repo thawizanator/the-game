@@ -9,40 +9,40 @@ class_name TwitchUserExtensionComponent
 	
 ## A Boolean value that determines the extension’s activation state. If **false**, the user has not configured a component extension.
 @export var active: bool:
-	set(val):
+	set(val): 
 		active = val
 		track_data(&"active", val)
 
 ## An ID that identifies the extension.
 @export var id: String:
-	set(val):
+	set(val): 
 		id = val
 		track_data(&"id", val)
 
 ## The extension’s version.
 @export var version: String:
-	set(val):
+	set(val): 
 		version = val
 		track_data(&"version", val)
 
 ## The extension’s name.
 @export var name: String:
-	set(val):
+	set(val): 
 		name = val
 		track_data(&"name", val)
 
 ## The x-coordinate where the extension is placed.
 @export var x: int:
-	set(val):
+	set(val): 
 		x = val
 		track_data(&"x", val)
 
 ## The y-coordinate where the extension is placed.
 @export var y: int:
-	set(val):
+	set(val): 
 		y = val
 		track_data(&"y", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -52,7 +52,6 @@ static func create(_active: bool) -> TwitchUserExtensionComponent:
 	return twitch_user_extension_component
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchUserExtensionComponent:
 	var result: TwitchUserExtensionComponent = TwitchUserExtensionComponent.new()
 	if d.get("active", null) != null:
@@ -68,4 +67,3 @@ static func from_json(d: Dictionary) -> TwitchUserExtensionComponent:
 	if d.get("y", null) != null:
 		result.y = d["y"]
 	return result
-

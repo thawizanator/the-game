@@ -15,25 +15,25 @@ class Body extends TwitchData:
 	##   
 	## **NOTE**: Only partners and affiliates may update a broadcast’s start time and only for non-recurring segments.
 	@export var start_time: String:
-		set(val):
+		set(val): 
 			start_time = val
 			track_data(&"start_time", val)
 	
 	## The length of time, in minutes, that the broadcast is scheduled to run. The duration must be in the range 30 through 1380 (23 hours).
 	@export var duration: String:
-		set(val):
+		set(val): 
 			duration = val
 			track_data(&"duration", val)
 	
 	## The ID of the category that best represents the broadcast’s content. To get the category ID, use the [Search Categories](https://dev.twitch.tv/docs/api/reference#search-categories) endpoint.
 	@export var category_id: String:
-		set(val):
+		set(val): 
 			category_id = val
 			track_data(&"category_id", val)
 	
 	## The broadcast’s title. The title may contain a maximum of 140 characters.
 	@export var title: String:
-		set(val):
+		set(val): 
 			title = val
 			track_data(&"title", val)
 	
@@ -41,16 +41,16 @@ class Body extends TwitchData:
 	##   
 	## **NOTE**: For recurring segments, the API cancels the first segment after the current UTC date and time and not the specified segment (unless the specified segment is the next segment after the current UTC date and time).
 	@export var is_canceled: bool:
-		set(val):
+		set(val): 
 			is_canceled = val
 			track_data(&"is_canceled", val)
 	
 	## The time zone where the broadcast takes place. Specify the time zone using [IANA time zone database](https://www.iana.org/time-zones) format (for example, America/New\_York).
 	@export var timezone: String:
-		set(val):
+		set(val): 
 			timezone = val
 			track_data(&"timezone", val)
-	
+	var response: BufferedHTTPClient.ResponseData
 	
 	
 	## Constructor with all required fields.
@@ -59,7 +59,6 @@ class Body extends TwitchData:
 		return body
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Body:
 		var result: Body = Body.new()
 		if d.get("start_time", null) != null:
@@ -84,7 +83,7 @@ class Response extends TwitchData:
 
 	## The broadcaster’s streaming scheduled.
 	@export var data: ResponseData:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -97,7 +96,6 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
@@ -112,34 +110,34 @@ class ResponseData extends TwitchData:
 
 	## A list that contains the single broadcast segment that you updated.
 	@export var segments: Array[TwitchChannelStreamScheduleSegment]:
-		set(val):
+		set(val): 
 			segments = val
 			track_data(&"segments", val)
 	
 	## The ID of the broadcaster that owns the broadcast schedule.
 	@export var broadcaster_id: String:
-		set(val):
+		set(val): 
 			broadcaster_id = val
 			track_data(&"broadcaster_id", val)
 	
 	## The broadcaster’s display name.
 	@export var broadcaster_name: String:
-		set(val):
+		set(val): 
 			broadcaster_name = val
 			track_data(&"broadcaster_name", val)
 	
 	## The broadcaster’s login name.
 	@export var broadcaster_login: String:
-		set(val):
+		set(val): 
 			broadcaster_login = val
 			track_data(&"broadcaster_login", val)
 	
 	## The dates when the broadcaster is on vacation and not streaming. Is set to **null** if vacation mode is not enabled.
 	@export var vacation: ResponseVacation:
-		set(val):
+		set(val): 
 			vacation = val
 			track_data(&"vacation", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -153,13 +151,11 @@ class ResponseData extends TwitchData:
 		return response_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseData:
 		var result: ResponseData = ResponseData.new()
 		if d.get("segments", null) != null:
 			for value in d["segments"]:
 				result.segments.append(TwitchChannelStreamScheduleSegment.from_json(value))
-			result.track_data(&"segments", result.segments)
 		if d.get("broadcaster_id", null) != null:
 			result.broadcaster_id = d["broadcaster_id"]
 		if d.get("broadcaster_name", null) != null:
@@ -178,16 +174,16 @@ class ResponseVacation extends TwitchData:
 
 	## The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation starts.
 	@export var start_time: String:
-		set(val):
+		set(val): 
 			start_time = val
 			track_data(&"start_time", val)
 	
 	## The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation ends.
 	@export var end_time: String:
-		set(val):
+		set(val): 
 			end_time = val
 			track_data(&"end_time", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -198,7 +194,6 @@ class ResponseVacation extends TwitchData:
 		return response_vacation
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseVacation:
 		var result: ResponseVacation = ResponseVacation.new()
 		if d.get("start_time", null) != null:

@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## A list that contains a single object with the broadcaster’s Shield Mode status.
 	@export var data: Array[ResponseData]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -26,13 +26,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(ResponseData.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -43,34 +41,34 @@ class ResponseData extends TwitchData:
 
 	## A Boolean value that determines whether Shield Mode is active. Is **true** if the broadcaster activated Shield Mode; otherwise, **false**.
 	@export var is_active: bool:
-		set(val):
+		set(val): 
 			is_active = val
 			track_data(&"is_active", val)
 	
 	## An ID that identifies the moderator that last activated Shield Mode. Is an empty string if Shield Mode hasn’t been previously activated.
 	@export var moderator_id: String:
-		set(val):
+		set(val): 
 			moderator_id = val
 			track_data(&"moderator_id", val)
 	
 	## The moderator’s login name. Is an empty string if Shield Mode hasn’t been previously activated.
 	@export var moderator_login: String:
-		set(val):
+		set(val): 
 			moderator_login = val
 			track_data(&"moderator_login", val)
 	
 	## The moderator’s display name. Is an empty string if Shield Mode hasn’t been previously activated.
 	@export var moderator_name: String:
-		set(val):
+		set(val): 
 			moderator_name = val
 			track_data(&"moderator_name", val)
 	
 	## The UTC timestamp (in RFC3339 format) of when Shield Mode was last activated. Is an empty string if Shield Mode hasn’t been previously activated.
 	@export var last_activated_at: String:
-		set(val):
+		set(val): 
 			last_activated_at = val
 			track_data(&"last_activated_at", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -84,7 +82,6 @@ class ResponseData extends TwitchData:
 		return response_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseData:
 		var result: ResponseData = ResponseData.new()
 		if d.get("is_active", null) != null:

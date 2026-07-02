@@ -9,16 +9,16 @@ class_name TwitchGuestStarSession
 	
 ## ID uniquely representing the Guest Star session.
 @export var id: String:
-	set(val):
+	set(val): 
 		id = val
 		track_data(&"id", val)
 
 ## List of guests currently interacting with the Guest Star session.
 @export var guests: Array[TwitchGuest]:
-	set(val):
+	set(val): 
 		guests = val
 		track_data(&"guests", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -29,7 +29,6 @@ static func create(_id: String, _guests: Array[TwitchGuest]) -> TwitchGuestStarS
 	return twitch_guest_star_session
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchGuestStarSession:
 	var result: TwitchGuestStarSession = TwitchGuestStarSession.new()
 	if d.get("id", null) != null:
@@ -37,6 +36,4 @@ static func from_json(d: Dictionary) -> TwitchGuestStarSession:
 	if d.get("guests", null) != null:
 		for value in d["guests"]:
 			result.guests.append(TwitchGuest.from_json(value))
-		result.track_data(&"guests", result.guests)
 	return result
-

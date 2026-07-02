@@ -20,10 +20,10 @@ class Body extends TwitchData:
 	##   
 	## Messages that exceed the maximum length are truncated.
 	@export var message: String:
-		set(val):
+		set(val): 
 			message = val
 			track_data(&"message", val)
-	
+	var response: BufferedHTTPClient.ResponseData
 	
 	
 	## Constructor with all required fields.
@@ -33,7 +33,6 @@ class Body extends TwitchData:
 		return body
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Body:
 		var result: Body = Body.new()
 		if d.get("message", null) != null:

@@ -13,10 +13,10 @@ class Body extends TwitchData:
 
 	## The list of messages to check. The list must contain at least one message and may contain up to a maximum of 100 messages.
 	@export var data: Array[BodyData]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
-	
+	var response: BufferedHTTPClient.ResponseData
 	
 	
 	## Constructor with all required fields.
@@ -26,13 +26,11 @@ class Body extends TwitchData:
 		return body
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Body:
 		var result: Body = Body.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(BodyData.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -43,13 +41,13 @@ class BodyData extends TwitchData:
 
 	## A caller-defined ID used to correlate this message with the same message in the response.
 	@export var msg_id: String:
-		set(val):
+		set(val): 
 			msg_id = val
 			track_data(&"msg_id", val)
 	
 	## The message to check.
 	@export var msg_text: String:
-		set(val):
+		set(val): 
 			msg_text = val
 			track_data(&"msg_text", val)
 	
@@ -63,7 +61,6 @@ class BodyData extends TwitchData:
 		return body_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> BodyData:
 		var result: BodyData = BodyData.new()
 		if d.get("msg_id", null) != null:
@@ -80,7 +77,7 @@ class Response extends TwitchData:
 
 	## The list of messages and whether Twitch would approve them for chat.
 	@export var data: Array[TwitchAutoModStatus]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -93,12 +90,10 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchAutoModStatus.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	

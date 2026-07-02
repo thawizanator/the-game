@@ -13,13 +13,13 @@ class Response extends TwitchData:
 
 	## The list of channels that match the query. The list is empty if there are no matches.
 	@export var data: Array[TwitchChannel]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	
 	## Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through.[Read More](https://dev.twitch.tv/docs/api/guide#pagination)
 	@export var pagination: ResponsePagination:
-		set(val):
+		set(val): 
 			pagination = val
 			track_data(&"pagination", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -32,13 +32,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchChannel.from_json(value))
-			result.track_data(&"data", result.data)
 		if d.get("pagination", null) != null:
 			result.pagination = ResponsePagination.from_json(d["pagination"])
 		return result
@@ -67,21 +65,20 @@ class Response extends TwitchData:
 	func _iter_init(iter: Array) -> bool:
 		if data.is_empty(): return false
 		iter[0] = data[0]
-		_cur_iter = 1
-		return true
-	
-	
+		return data.size() > 0
+		
+		
 	func _iter_next(iter: Array) -> bool:
-		if data.size() > _cur_iter:
-			iter[0] = data[_cur_iter]
+		if data.size() - 1 > _cur_iter:
 			_cur_iter += 1
-		elif not _has_pagination():
+			iter[0] = data[_cur_iter]
+		if data.size() - 1 == _cur_iter && not _has_pagination(): 
 			return false
 		return true
-	
-	
+		
+		
 	func _iter_get(iter: Variant) -> Variant:
-		if data.size() == _cur_iter && _has_pagination():
+		if data.size() - 1 == _cur_iter && _has_pagination():
 			await next_page()
 		return iter
 
@@ -92,10 +89,10 @@ class ResponsePagination extends TwitchData:
 
 	## The cursor used to get the next page of results. Use the cursor to set the request’s _after_ query parameter.
 	@export var cursor: String:
-		set(val):
+		set(val): 
 			cursor = val
 			track_data(&"cursor", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -104,7 +101,6 @@ class ResponsePagination extends TwitchData:
 		return response_pagination
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponsePagination:
 		var result: ResponsePagination = ResponsePagination.new()
 		if d.get("cursor", null) != null:
@@ -119,19 +115,19 @@ class Opt extends TwitchData:
 
 	## A Boolean value that determines whether the response includes only channels that are currently streaming live. Set to **true** to get only channels that are streaming live; otherwise, **false** to get live and offline channels. The default is **false**.
 	@export var live_only: bool:
-		set(val):
+		set(val): 
 			live_only = val
 			track_data(&"live_only", val)
 	
 	## The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100 items per page. The default is 20.
 	@export var first: int:
-		set(val):
+		set(val): 
 			first = val
 			track_data(&"first", val)
 	
 	## The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
 	@export var after: String:
-		set(val):
+		set(val): 
 			after = val
 			track_data(&"after", val)
 	
@@ -143,7 +139,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("live_only", null) != null:

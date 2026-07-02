@@ -4,27 +4,22 @@ extends RefCounted
 class_name TwitchCommandInfo
 
 
-var command : TwitchCommandBase
+var command : TwitchCommand
 var channel_name : String
 var username : String
-var user_id : String
-var arguments : PackedStringArray = []
-## The original received message as string
-var text_message : String
+var arguments : Array[String]
 ## Depending on the type it's either a TwitchChatMessage or a Dictionary of the whisper message data
 var original_message : Variant
 
 
 func _init(
-	_command: TwitchCommandBase,
+	_command: TwitchCommand,
 	_channel_name: String,
 	_username: String,
-	_user_id: String,
-	_original_message: Variant,
-	_text_message: String):
+	_arguments: Array[String],
+	_original_message: Variant):
 	command = _command
 	channel_name = _channel_name
 	username = _username
-	user_id = _user_id
+	arguments = _arguments
 	original_message = _original_message
-	text_message = _text_message

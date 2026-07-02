@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## 
 	@export var data: Array[ResponseData]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	
@@ -21,7 +21,7 @@ class Response extends TwitchData:
 	##   
 	##  For information about what the template looks like and how to use it to fetch emotes, see [Emote CDN URL](https://dev.twitch.tv/docs/irc/emotes#cdn-template) format.
 	@export var template: String:
-		set(val):
+		set(val): 
 			template = val
 			track_data(&"template", val)
 	
@@ -29,7 +29,7 @@ class Response extends TwitchData:
 	##   
 	##  For more information about pagination support, see [Twitch API Guide - Pagination](https://dev.twitch.tv/docs/api/guide#pagination).
 	@export var pagination: ResponsePagination:
-		set(val):
+		set(val): 
 			pagination = val
 			track_data(&"pagination", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -43,13 +43,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(ResponseData.from_json(value))
-			result.track_data(&"data", result.data)
 		if d.get("template", null) != null:
 			result.template = d["template"]
 		if d.get("pagination", null) != null:
@@ -81,21 +79,20 @@ class Response extends TwitchData:
 	func _iter_init(iter: Array) -> bool:
 		if data.is_empty(): return false
 		iter[0] = data[0]
-		_cur_iter = 1
-		return true
-	
-	
+		return data.size() > 0
+		
+		
 	func _iter_next(iter: Array) -> bool:
-		if data.size() > _cur_iter:
-			iter[0] = data[_cur_iter]
+		if data.size() - 1 > _cur_iter:
 			_cur_iter += 1
-		elif not _has_pagination():
+			iter[0] = data[_cur_iter]
+		if data.size() - 1 == _cur_iter && not _has_pagination(): 
 			return false
 		return true
-	
-	
+		
+		
 	func _iter_get(iter: Variant) -> Variant:
-		if data.size() == _cur_iter && _has_pagination():
+		if data.size() - 1 == _cur_iter && _has_pagination():
 			await next_page()
 		return iter
 
@@ -106,13 +103,13 @@ class ResponseData extends TwitchData:
 
 	## An ID that uniquely identifies this emote.
 	@export var id: String:
-		set(val):
+		set(val): 
 			id = val
 			track_data(&"id", val)
 	
 	## The User ID of broadcaster whose channel is receiving the unban request.
 	@export var name: String:
-		set(val):
+		set(val): 
 			name = val
 			track_data(&"name", val)
 	
@@ -133,19 +130,19 @@ class ResponseData extends TwitchData:
 	## * **twofactor** — Emotes granted by enabling two-factor authentication on an account.
 	## * **limitedtime** — Emotes that were granted for only a limited time.
 	@export var emote_type: String:
-		set(val):
+		set(val): 
 			emote_type = val
 			track_data(&"emote_type", val)
 	
 	## An ID that identifies the emote set that the emote belongs to.
 	@export var emote_set_id: String:
-		set(val):
+		set(val): 
 			emote_set_id = val
 			track_data(&"emote_set_id", val)
 	
 	## The ID of the broadcaster who owns the emote.
 	@export var owner_id: String:
-		set(val):
+		set(val): 
 			owner_id = val
 			track_data(&"owner_id", val)
 	
@@ -154,7 +151,7 @@ class ResponseData extends TwitchData:
 	## * **animated** — An animated GIF is available for this emote.
 	## * **static** — A static PNG file is available for this emote.
 	@export var format: Array[String]:
-		set(val):
+		set(val): 
 			format = val
 			track_data(&"format", val)
 	
@@ -164,7 +161,7 @@ class ResponseData extends TwitchData:
 	## * **2.0** — A medium version (56px x 56px) is available.
 	## * **3.0** — A large version (112px x 112px) is available.
 	@export var scale: Array[String]:
-		set(val):
+		set(val): 
 			scale = val
 			track_data(&"scale", val)
 	
@@ -173,10 +170,10 @@ class ResponseData extends TwitchData:
 	## * **dark**
 	## * **light**
 	@export var theme_mode: Array[String]:
-		set(val):
+		set(val): 
 			theme_mode = val
 			track_data(&"theme_mode", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -193,7 +190,6 @@ class ResponseData extends TwitchData:
 		return response_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseData:
 		var result: ResponseData = ResponseData.new()
 		if d.get("id", null) != null:
@@ -209,15 +205,12 @@ class ResponseData extends TwitchData:
 		if d.get("format", null) != null:
 			for value in d["format"]:
 				result.format.append(value)
-			result.track_data(&"format", result.format)
 		if d.get("scale", null) != null:
 			for value in d["scale"]:
 				result.scale.append(value)
-			result.track_data(&"scale", result.scale)
 		if d.get("theme_mode", null) != null:
 			for value in d["theme_mode"]:
 				result.theme_mode.append(value)
-			result.track_data(&"theme_mode", result.theme_mode)
 		return result
 	
 
@@ -230,10 +223,10 @@ class ResponsePagination extends TwitchData:
 
 	## The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
 	@export var cursor: String:
-		set(val):
+		set(val): 
 			cursor = val
 			track_data(&"cursor", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -242,7 +235,6 @@ class ResponsePagination extends TwitchData:
 		return response_pagination
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponsePagination:
 		var result: ResponsePagination = ResponsePagination.new()
 		if d.get("cursor", null) != null:
@@ -257,7 +249,7 @@ class Opt extends TwitchData:
 
 	## The cursor used to get the next page of results. The Pagination object in the response contains the cursor’s value.
 	@export var after: String:
-		set(val):
+		set(val): 
 			after = val
 			track_data(&"after", val)
 	
@@ -265,7 +257,7 @@ class Opt extends TwitchData:
 	##   
 	## **Note:** If the user specified in `user_id` is subscribed to the broadcaster specified, their follower emotes will appear in the response body regardless if this query parameter is used.
 	@export var broadcaster_id: String:
-		set(val):
+		set(val): 
 			broadcaster_id = val
 			track_data(&"broadcaster_id", val)
 	
@@ -277,7 +269,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("after", null) != null:

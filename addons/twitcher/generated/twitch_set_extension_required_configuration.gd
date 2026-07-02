@@ -13,22 +13,22 @@ class Body extends TwitchData:
 
 	## The ID of the extension to update.
 	@export var extension_id: String:
-		set(val):
+		set(val): 
 			extension_id = val
 			track_data(&"extension_id", val)
 	
 	## The version of the extension to update.
 	@export var extension_version: String:
-		set(val):
+		set(val): 
 			extension_version = val
 			track_data(&"extension_version", val)
 	
 	## The required\_configuration string to use with the extension.
 	@export var required_configuration: String:
-		set(val):
+		set(val): 
 			required_configuration = val
 			track_data(&"required_configuration", val)
-	
+	var response: BufferedHTTPClient.ResponseData
 	
 	
 	## Constructor with all required fields.
@@ -40,7 +40,6 @@ class Body extends TwitchData:
 		return body
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Body:
 		var result: Body = Body.new()
 		if d.get("extension_id", null) != null:

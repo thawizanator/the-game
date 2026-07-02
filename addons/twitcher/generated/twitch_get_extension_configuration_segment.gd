@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## The list of requested configuration segments. The list is returned in the same order that you specified the list of segments in the request.
 	@export var data: Array[TwitchExtensionConfigurationSegment]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -26,13 +26,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchExtensionConfigurationSegment.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -43,7 +41,7 @@ class Opt extends TwitchData:
 
 	## The ID of the broadcaster that installed the extension. This parameter is required if you set the _segment_ parameter to broadcaster or developer. Do not specify this parameter if you set _segment_ to global.
 	@export var broadcaster_id: String:
-		set(val):
+		set(val): 
 			broadcaster_id = val
 			track_data(&"broadcaster_id", val)
 	
@@ -55,7 +53,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("broadcaster_id", null) != null:

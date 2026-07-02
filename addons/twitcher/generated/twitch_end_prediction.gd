@@ -13,13 +13,13 @@ class Body extends TwitchData:
 
 	## The ID of the broadcaster that’s running the prediction. This ID must match the user ID in the user access token.
 	@export var broadcaster_id: String:
-		set(val):
+		set(val): 
 			broadcaster_id = val
 			track_data(&"broadcaster_id", val)
 	
 	## The ID of the prediction to update.
 	@export var id: String:
-		set(val):
+		set(val): 
 			id = val
 			track_data(&"id", val)
 	
@@ -33,16 +33,16 @@ class Body extends TwitchData:
 	##   
 	## The broadcaster has up to 24 hours after the prediction window closes to resolve the prediction. If not, Twitch sets the status to CANCELED and returns the points.
 	@export var status: String:
-		set(val):
+		set(val): 
 			status = val
 			track_data(&"status", val)
 	
 	## The ID of the winning outcome. You must set this parameter if you set `status` to RESOLVED.
 	@export var winning_outcome_id: String:
-		set(val):
+		set(val): 
 			winning_outcome_id = val
 			track_data(&"winning_outcome_id", val)
-	
+	var response: BufferedHTTPClient.ResponseData
 	
 	
 	## Constructor with all required fields.
@@ -54,7 +54,6 @@ class Body extends TwitchData:
 		return body
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Body:
 		var result: Body = Body.new()
 		if d.get("broadcaster_id", null) != null:
@@ -75,7 +74,7 @@ class Response extends TwitchData:
 
 	## A list that contains the single prediction that you updated.
 	@export var data: Array[TwitchPrediction]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -88,12 +87,10 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchPrediction.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	

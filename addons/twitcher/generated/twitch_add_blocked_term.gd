@@ -17,10 +17,10 @@ class Body extends TwitchData:
 	##   
 	## If the blocked term already exists, the response contains the existing blocked term.
 	@export var text: String:
-		set(val):
+		set(val): 
 			text = val
 			track_data(&"text", val)
-	
+	var response: BufferedHTTPClient.ResponseData
 	
 	
 	## Constructor with all required fields.
@@ -30,7 +30,6 @@ class Body extends TwitchData:
 		return body
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Body:
 		var result: Body = Body.new()
 		if d.get("text", null) != null:
@@ -45,7 +44,7 @@ class Response extends TwitchData:
 
 	## A list that contains the single blocked term that the broadcaster added.
 	@export var data: Array[TwitchBlockedTerm]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -58,12 +57,10 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchBlockedTerm.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	

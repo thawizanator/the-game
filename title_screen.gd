@@ -1,6 +1,5 @@
 extends Control
 
-
 # UI Container references
 @onready var main_menu_container: VBoxContainer = $MainMenuContainer
 @onready var main_menu_background: TextureRect = $Background
@@ -21,6 +20,7 @@ extends Control
 @onready var game_3_check: CheckBox = $StudioSetupContainer/VBox/GamesGrid/Game3Check
 @onready var game_4_check: CheckBox = $StudioSetupContainer/VBox/GamesGrid/Game4Check
 
+# One config file for everything
 const SAVE_PATH = "user://studio_settings.cfg"
 
 
@@ -39,6 +39,7 @@ func _ready() -> void:
 	# Automatically look for and load previous configurations
 	load_studio_settings()
 
+
 # --- NAVIGATION CONTROLS ---
 
 func _on_host_btn_pressed() -> void:
@@ -54,7 +55,6 @@ func _on_exit_game_btn_pressed() -> void:
 	get_tree().quit()
 
 func _on_studio_setup_btn_pressed() -> void:
-	# Hide host menu panel, reveal full setup board
 	host_menu_container.visible = false
 	main_menu_background.visible = false
 	studio_setup_container.visible = true
@@ -71,17 +71,16 @@ func _on_host_back_btn_pressed() -> void:
 	main_menu_background.visible = true
 
 func _on_setup_back_btn_pressed() -> void:
-	# Return back to Host selections
 	studio_setup_container.visible = false
 	host_menu_container.visible = true
 	main_menu_background.visible = true
+
 
 # --- LOCAL FILE STORAGE PROFILE MANAGEMENT (ConfigFile) ---
 
 func _on_save_settings_btn_pressed() -> void:
 	var config = ConfigFile.new()
 	
-	# Set general parameters
 	config.set_value("StudioSetup", "max_players", player_count_spin.value)
 	config.set_value("StudioSetup", "mod_count", mod_count_spin.value)
 	config.set_value("StudioSetup", "dual_monitor", dual_monitor_check.button_pressed)
@@ -89,13 +88,11 @@ func _on_save_settings_btn_pressed() -> void:
 	config.set_value("StudioSetup", "scoreboard_mode", score_mode_option.get_selected_id())
 	config.set_value("StudioSetup", "twitch_chat", twitch_interact_check.button_pressed)
 	
-	# Set game grid matrix states
 	config.set_value("ActiveGames", "game_trivia", game_1_check.button_pressed)
 	config.set_value("ActiveGames", "game_typeracer", game_2_check.button_pressed)
 	config.set_value("ActiveGames", "game_wheel", game_3_check.button_pressed)
 	config.set_value("ActiveGames", "game_polls", game_4_check.button_pressed)
 	
-	# Write configuration data out to disk locally
 	var error = config.save(SAVE_PATH)
 	if error == OK:
 		print("💾 Studio config saved successfully to: ", OS.get_user_data_dir())
@@ -106,7 +103,6 @@ func load_studio_settings() -> void:
 	var config = ConfigFile.new()
 	var error = config.load(SAVE_PATH)
 	
-	# If file doesn't exist yet, gracefully skip loading defaults
 	if error != OK:
 		print("ℹ️ No profile save file detected. Using factory studio defaults.")
 		return
@@ -122,14 +118,12 @@ func load_studio_settings() -> void:
 	
 	twitch_interact_check.button_pressed = config.get_value("StudioSetup", "twitch_chat", false)
 	
-	# Load checkmarks for your grid items
 	game_1_check.button_pressed = config.get_value("ActiveGames", "game_trivia", true)
 	game_2_check.button_pressed = config.get_value("ActiveGames", "game_typeracer", true)
 	game_3_check.button_pressed = config.get_value("ActiveGames", "game_wheel", true)
 	game_4_check.button_pressed = config.get_value("ActiveGames", "game_polls", true)
 	
 func _input(event):
-	# 1. The Nuclear Option / Fail-Safe Kill Combination 
 	if Input.is_key_pressed(KEY_KP_5) and Input.is_key_pressed(KEY_SHIFT):
 		print("☢️ EMERGENCY FAIL-SAFE TRIPPED! Closing environment down...")
 		get_tree().quit()

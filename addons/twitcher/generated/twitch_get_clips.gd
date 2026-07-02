@@ -13,13 +13,13 @@ class Response extends TwitchData:
 
 	## The list of video clips. For clips returned by _game\_id_ or _broadcaster\_id_, the list is in descending order by view count. For lists returned by _id_, the list is in the same order as the input IDs.
 	@export var data: Array[TwitchClip]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	
 	## The information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
 	@export var pagination: ResponsePagination:
-		set(val):
+		set(val): 
 			pagination = val
 			track_data(&"pagination", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -32,13 +32,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchClip.from_json(value))
-			result.track_data(&"data", result.data)
 		if d.get("pagination", null) != null:
 			result.pagination = ResponsePagination.from_json(d["pagination"])
 		return result
@@ -67,21 +65,20 @@ class Response extends TwitchData:
 	func _iter_init(iter: Array) -> bool:
 		if data.is_empty(): return false
 		iter[0] = data[0]
-		_cur_iter = 1
-		return true
-	
-	
+		return data.size() > 0
+		
+		
 	func _iter_next(iter: Array) -> bool:
-		if data.size() > _cur_iter:
-			iter[0] = data[_cur_iter]
+		if data.size() - 1 > _cur_iter:
 			_cur_iter += 1
-		elif not _has_pagination():
+			iter[0] = data[_cur_iter]
+		if data.size() - 1 == _cur_iter && not _has_pagination(): 
 			return false
 		return true
-	
-	
+		
+		
 	func _iter_get(iter: Variant) -> Variant:
-		if data.size() == _cur_iter && _has_pagination():
+		if data.size() - 1 == _cur_iter && _has_pagination():
 			await next_page()
 		return iter
 
@@ -92,10 +89,10 @@ class ResponsePagination extends TwitchData:
 
 	## The cursor used to get the next page of results. Set the request’s _after_ or _before_ query parameter to this value depending on whether you’re paging forwards or backwards.
 	@export var cursor: String:
-		set(val):
+		set(val): 
 			cursor = val
 			track_data(&"cursor", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -104,7 +101,6 @@ class ResponsePagination extends TwitchData:
 		return response_pagination
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponsePagination:
 		var result: ResponsePagination = ResponsePagination.new()
 		if d.get("cursor", null) != null:
@@ -119,55 +115,55 @@ class Opt extends TwitchData:
 
 	## An ID that identifies the broadcaster whose video clips you want to get. Use this parameter to get clips that were captured from the broadcaster’s streams.
 	@export var broadcaster_id: String:
-		set(val):
+		set(val): 
 			broadcaster_id = val
 			track_data(&"broadcaster_id", val)
 	
 	## An ID that identifies the game whose clips you want to get. Use this parameter to get clips that were captured from streams that were playing this game.
 	@export var game_id: String:
-		set(val):
+		set(val): 
 			game_id = val
 			track_data(&"game_id", val)
 	
 	## An ID that identifies the clip to get. To specify more than one ID, include this parameter for each clip you want to get. For example, `id=foo&id=bar`. You may specify a maximum of 100 IDs. The API ignores duplicate IDs and IDs that aren’t found.
 	@export var id: Array[String]:
-		set(val):
+		set(val): 
 			id = val
 			track_data(&"id", val)
 	
 	## The start date used to filter clips. The API returns only clips within the start and end date window. Specify the date and time in RFC3339 format.
 	@export var started_at: String:
-		set(val):
+		set(val): 
 			started_at = val
 			track_data(&"started_at", val)
 	
 	## The end date used to filter clips. If not specified, the time window is the start date plus one week. Specify the date and time in RFC3339 format.
 	@export var ended_at: String:
-		set(val):
+		set(val): 
 			ended_at = val
 			track_data(&"ended_at", val)
 	
 	## The maximum number of clips to return per page in the response. The minimum page size is 1 clip per page and the maximum is 100\. The default is 20.
 	@export var first: int:
-		set(val):
+		set(val): 
 			first = val
 			track_data(&"first", val)
 	
 	## The cursor used to get the previous page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
 	@export var before: String:
-		set(val):
+		set(val): 
 			before = val
 			track_data(&"before", val)
 	
 	## The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
 	@export var after: String:
-		set(val):
+		set(val): 
 			after = val
 			track_data(&"after", val)
 	
 	## A Boolean value that determines whether the response includes featured clips. If **true**, returns only clips that are featured. If **false**, returns only clips that aren’t featured. All clips are returned if this parameter is not present.
 	@export var is_featured: bool:
-		set(val):
+		set(val): 
 			is_featured = val
 			track_data(&"is_featured", val)
 	
@@ -179,7 +175,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("broadcaster_id", null) != null:
@@ -189,7 +184,6 @@ class Opt extends TwitchData:
 		if d.get("id", null) != null:
 			for value in d["id"]:
 				result.id.append(value)
-			result.track_data(&"id", result.id)
 		if d.get("started_at", null) != null:
 			result.started_at = d["started_at"]
 		if d.get("ended_at", null) != null:

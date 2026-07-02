@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## The list of chat settings. The list contains a single object with all the settings.
 	@export var data: Array[TwitchChatSettings]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -26,13 +26,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchChatSettings.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -47,7 +45,7 @@ class Opt extends TwitchData:
 	##   
 	## If you specify this field, this ID must match the user ID in the user access token.
 	@export var moderator_id: String:
-		set(val):
+		set(val): 
 			moderator_id = val
 			track_data(&"moderator_id", val)
 	
@@ -59,7 +57,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("moderator_id", null) != null:

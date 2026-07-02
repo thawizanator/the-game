@@ -9,16 +9,16 @@ class_name TwitchCheermoteImageTheme
 	
 ## 
 @export var animated_format: TwitchCheermoteImageFormat:
-	set(val):
+	set(val): 
 		animated_format = val
-		track_data(&"animated", val)
+		track_data(&"animated_format", val)
 
 ## 
 @export var static_format: TwitchCheermoteImageFormat:
-	set(val):
+	set(val): 
 		static_format = val
-		track_data(&"static", val)
-
+		track_data(&"static_format", val)
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -27,12 +27,10 @@ static func create() -> TwitchCheermoteImageTheme:
 	return twitch_cheermote_image_theme
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchCheermoteImageTheme:
 	var result: TwitchCheermoteImageTheme = TwitchCheermoteImageTheme.new()
-	if d.get("animated", null) != null:
-		result.animated_format = TwitchCheermoteImageFormat.from_json(d["animated"])
-	if d.get("static", null) != null:
-		result.static_format = TwitchCheermoteImageFormat.from_json(d["static"])
+	if d.get("animated_format", null) != null:
+		result.animated_format = TwitchCheermoteImageFormat.from_json(d["animated_format"])
+	if d.get("static_format", null) != null:
+		result.static_format = TwitchCheermoteImageFormat.from_json(d["static_format"])
 	return result
-

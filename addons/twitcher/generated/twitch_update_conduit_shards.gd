@@ -13,16 +13,16 @@ class Body extends TwitchData:
 
 	## Conduit ID.
 	@export var conduit_id: String:
-		set(val):
+		set(val): 
 			conduit_id = val
 			track_data(&"conduit_id", val)
 	
 	## List of shards to update.
 	@export var shards: Array[BodyShards]:
-		set(val):
+		set(val): 
 			shards = val
 			track_data(&"shards", val)
-	
+	var response: BufferedHTTPClient.ResponseData
 	
 	
 	## Constructor with all required fields.
@@ -33,7 +33,6 @@ class Body extends TwitchData:
 		return body
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Body:
 		var result: Body = Body.new()
 		if d.get("conduit_id", null) != null:
@@ -41,7 +40,6 @@ class Body extends TwitchData:
 		if d.get("shards", null) != null:
 			for value in d["shards"]:
 				result.shards.append(BodyShards.from_json(value))
-			result.track_data(&"shards", result.shards)
 		return result
 	
 
@@ -52,13 +50,13 @@ class BodyShards extends TwitchData:
 
 	## Shard ID.
 	@export var id: String:
-		set(val):
+		set(val): 
 			id = val
 			track_data(&"id", val)
 	
 	## The transport details that you want Twitch to use when sending you notifications.
 	@export var transport: BodyTransport:
-		set(val):
+		set(val): 
 			transport = val
 			track_data(&"transport", val)
 	
@@ -72,7 +70,6 @@ class BodyShards extends TwitchData:
 		return body_shards
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> BodyShards:
 		var result: BodyShards = BodyShards.new()
 		if d.get("id", null) != null:
@@ -92,25 +89,25 @@ class BodyTransport extends TwitchData:
 	## * webhook
 	## * websocket
 	@export var method: String:
-		set(val):
+		set(val): 
 			method = val
 			track_data(&"method", val)
 	
 	## The callback URL where the notifications are sent. The URL must use the HTTPS protocol and port 443\. See Processing an event.Specify this field only if method is set to webhook.NOTE: Redirects are not followed.
 	@export var callback: String:
-		set(val):
+		set(val): 
 			callback = val
 			track_data(&"callback", val)
 	
 	## The secret used to verify the signature. The secret must be an ASCII string that’s a minimum of 10 characters long and a maximum of 100 characters long. For information about how the secret is used, see Verifying the event message.Specify this field only if method is set to webhook.
 	@export var secret: String:
-		set(val):
+		set(val): 
 			secret = val
 			track_data(&"secret", val)
 	
 	## An ID that identifies the WebSocket to send notifications to. When you connect to EventSub using WebSockets, the server returns the ID in the Welcome message.Specify this field only if method is set to websocket.
 	@export var session_id: String:
-		set(val):
+		set(val): 
 			session_id = val
 			track_data(&"session_id", val)
 	
@@ -122,7 +119,6 @@ class BodyTransport extends TwitchData:
 		return body_transport
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> BodyTransport:
 		var result: BodyTransport = BodyTransport.new()
 		if d.get("method", null) != null:
@@ -143,13 +139,13 @@ class Response extends TwitchData:
 
 	## List of successful shard updates.
 	@export var data: Array[ResponseData]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	
 	## List of unsuccessful updates.
 	@export var errors: Array[ResponseErrors]:
-		set(val):
+		set(val): 
 			errors = val
 			track_data(&"errors", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -163,17 +159,14 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(ResponseData.from_json(value))
-			result.track_data(&"data", result.data)
 		if d.get("errors", null) != null:
 			for value in d["errors"]:
 				result.errors.append(ResponseErrors.from_json(value))
-			result.track_data(&"errors", result.errors)
 		return result
 	
 
@@ -184,7 +177,7 @@ class ResponseData extends TwitchData:
 
 	## Shard ID.
 	@export var id: String:
-		set(val):
+		set(val): 
 			id = val
 			track_data(&"id", val)
 	
@@ -202,16 +195,16 @@ class ResponseData extends TwitchData:
 	## * websocket\_network\_error — The Twitch WebSocket server experienced a network error writing the message to the client.
 	## * websocket\_failed\_to\_reconnect - The client failed to reconnect to the Twitch WebSocket server within the required time after a Reconnect Message.
 	@export var status: String:
-		set(val):
+		set(val): 
 			status = val
 			track_data(&"status", val)
 	
 	## The transport details used to send the notifications.
 	@export var transport: ResponseTransport:
-		set(val):
+		set(val): 
 			transport = val
 			track_data(&"transport", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -223,7 +216,6 @@ class ResponseData extends TwitchData:
 		return response_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseData:
 		var result: ResponseData = ResponseData.new()
 		if d.get("id", null) != null:
@@ -245,34 +237,34 @@ class ResponseTransport extends TwitchData:
 	## * webhook
 	## * websocket
 	@export var method: String:
-		set(val):
+		set(val): 
 			method = val
 			track_data(&"method", val)
 	
 	## The callback URL where the notifications are sent. Included only if method is set to webhook.
 	@export var callback: String:
-		set(val):
+		set(val): 
 			callback = val
 			track_data(&"callback", val)
 	
 	## An ID that identifies the WebSocket that notifications are sent to. Included only if method is set to websocket.
 	@export var session_id: String:
-		set(val):
+		set(val): 
 			session_id = val
 			track_data(&"session_id", val)
 	
 	## The UTC date and time that the WebSocket connection was established. Included only if method is set to websocket.
 	@export var connected_at: String:
-		set(val):
+		set(val): 
 			connected_at = val
 			track_data(&"connected_at", val)
 	
 	## The UTC date and time that the WebSocket connection was lost. Included only if method is set to websocket.
 	@export var disconnected_at: String:
-		set(val):
+		set(val): 
 			disconnected_at = val
 			track_data(&"disconnected_at", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -282,7 +274,6 @@ class ResponseTransport extends TwitchData:
 		return response_transport
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseTransport:
 		var result: ResponseTransport = ResponseTransport.new()
 		if d.get("method", null) != null:
@@ -305,7 +296,7 @@ class ResponseErrors extends TwitchData:
 
 	## Shard ID.
 	@export var id: String:
-		set(val):
+		set(val): 
 			id = val
 			track_data(&"id", val)
 	
@@ -319,16 +310,16 @@ class ResponseErrors extends TwitchData:
 	## * The websocket session is not connected.
 	## * The shard id is outside of the conduit’s range.
 	@export var message: String:
-		set(val):
+		set(val): 
 			message = val
 			track_data(&"message", val)
 	
 	## Error codes used to represent a specific error condition while attempting to update shards.
 	@export var code: String:
-		set(val):
+		set(val): 
 			code = val
 			track_data(&"code", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -340,7 +331,6 @@ class ResponseErrors extends TwitchData:
 		return response_errors
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseErrors:
 		var result: ResponseErrors = ResponseErrors.new()
 		if d.get("id", null) != null:

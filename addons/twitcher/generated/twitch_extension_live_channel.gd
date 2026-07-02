@@ -9,34 +9,34 @@ class_name TwitchExtensionLiveChannel
 	
 ## The ID of the broadcaster that is streaming live and has installed or activated the extension.
 @export var broadcaster_id: String:
-	set(val):
+	set(val): 
 		broadcaster_id = val
 		track_data(&"broadcaster_id", val)
 
 ## The broadcaster’s display name.
 @export var broadcaster_name: String:
-	set(val):
+	set(val): 
 		broadcaster_name = val
 		track_data(&"broadcaster_name", val)
 
 ## The name of the category or game being streamed.
 @export var game_name: String:
-	set(val):
+	set(val): 
 		game_name = val
 		track_data(&"game_name", val)
 
 ## The ID of the category or game being streamed.
 @export var game_id: String:
-	set(val):
+	set(val): 
 		game_id = val
 		track_data(&"game_id", val)
 
 ## The title of the broadcaster’s stream. May be an empty string if not specified.
 @export var title: String:
-	set(val):
+	set(val): 
 		title = val
 		track_data(&"title", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -50,7 +50,6 @@ static func create(_broadcaster_id: String, _broadcaster_name: String, _game_nam
 	return twitch_extension_live_channel
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchExtensionLiveChannel:
 	var result: TwitchExtensionLiveChannel = TwitchExtensionLiveChannel.new()
 	if d.get("broadcaster_id", null) != null:
@@ -64,4 +63,3 @@ static func from_json(d: Dictionary) -> TwitchExtensionLiveChannel:
 	if d.get("title", null) != null:
 		result.title = d["title"]
 	return result
-

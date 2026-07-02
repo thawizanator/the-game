@@ -9,22 +9,22 @@ class_name TwitchUserVip
 	
 ## An ID that uniquely identifies the VIP user.
 @export var user_id: String:
-	set(val):
+	set(val): 
 		user_id = val
 		track_data(&"user_id", val)
 
 ## The user’s display name.
 @export var user_name: String:
-	set(val):
+	set(val): 
 		user_name = val
 		track_data(&"user_name", val)
 
 ## The user’s login name.
 @export var user_login: String:
-	set(val):
+	set(val): 
 		user_login = val
 		track_data(&"user_login", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -36,7 +36,6 @@ static func create(_user_id: String, _user_name: String, _user_login: String) ->
 	return twitch_user_vip
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchUserVip:
 	var result: TwitchUserVip = TwitchUserVip.new()
 	if d.get("user_id", null) != null:
@@ -46,4 +45,3 @@ static func from_json(d: Dictionary) -> TwitchUserVip:
 	if d.get("user_login", null) != null:
 		result.user_login = d["user_login"]
 	return result
-

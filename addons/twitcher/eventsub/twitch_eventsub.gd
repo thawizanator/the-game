@@ -46,35 +46,12 @@ class Session extends RefCounted:
 			reconnect_url = d["reconnect_url"]
 		connected_at = d["connected_at"]
 
-## A specific event received from eventsub
-class Event extends RefCounted:
-	var type: TwitchEventsubDefinition:
-		get(): return TwitchEventsubDefinition.BY_NAME[message.payload.subscription.type]
-	var data: Dictionary:
-		get(): return message.payload.event
-	var message: TwitchNotificationMessage
-
-	var typed_data: Variant:
-		get():
-			if "Event" in type.response_script:
-				return type.response_script.Event.from_json(data)
-			else:
-				return type.response_script.EventV2.from_json(data)
-
-
-	func _init(notification_message: TwitchNotificationMessage) -> void:
-		message = notification_message
-
 
 ## Will be send as soon as the websocket connection is up and running you can use it to subscribe to events
 signal session_id_received(id: String)
 
 ## Will be called when an event is sent from Twitch.
 signal event(type: StringName, data: Dictionary)
-
-## Will be called when an event is sent from Twitch. Same like event signal but better named and easier to use in
-## inline awaits.
-signal event_received(event: Event)
 
 ## Will be called when an event got revoked from your subscription by Twitch.
 signal events_revoked(type: StringName, status: String)
@@ -83,18 +60,12 @@ signal events_revoked(type: StringName, status: String)
 signal message_received(message: Variant)
 
 
-## The api used to create the subscriptions (Can be empty will automatically look for first [TwitchAPI] in the
-## scene tree)
 @export var api: TwitchAPI
-## All subscriptions this eventsub should subscribe to
 @export var _subscriptions: Array[TwitchEventsubConfig] = []
-## Live twitch server you don't need to touch it except you want to implement a proxy in between for example
+@export var scopes: OAuthScopes
 @export var eventsub_live_server_url: String = "wss://eventsub.wss.twitch.tv/ws"
-## Test server in combination of TwitchCLI
 @export var eventsub_test_server_url: String = "ws://127.0.0.1:8080/ws"
-## Enables the test server usage
 @export var use_test_server: bool
-## Ignores messages that are older than this value. Twitch can send messages multiple time.
 @export var ignore_message_eventsub_in_seconds: int = 600
 
 var _client: WebsocketClient = WebsocketClient.new()
@@ -119,8 +90,7 @@ var _swap_over_process: bool
 ## queues the actions that should be executed when the connection is established
 var _action_stack: Array[SubscriptionAction]
 var _executing_action_stack: bool
-## Increased on every reconnect without subscriptions
-var _empty_connections: int
+
 
 ## Determines the action that the subscription should do
 class SubscriptionAction extends RefCounted:
@@ -132,10 +102,11 @@ class SubscriptionAction extends RefCounted:
 
 
 func _init() -> void:
+	_log.enabled = true
+	_log.debug = true
 	_client.connection_url = eventsub_live_server_url
 	_client.message_received.connect(_data_received)
 	_client.connection_established.connect(_on_connection_established)
-	_client.connection_closed.connect(_on_connection_closed)
 	_test_client.connection_url = eventsub_test_server_url
 	_test_client.message_received.connect(_data_received)
 
@@ -151,24 +122,16 @@ func _ready() -> void:
 
 func _enter_tree() -> void:
 	if instance == null: instance = self
-
-
+	
+	
 func _exit_tree() -> void:
 	if instance == self: instance = null
-
+	
 
 ## Propergated call from twitch service
 func do_setup() -> void:
 	await open_connection()
 	_log.i("Eventsub setup")
-
-
-## Propergated call from twitch service
-func do_unsetup() -> void:
-	for subscription in _subscriptions:
-		unsubscribe(subscription)
-	close_connection()
-	_log.i("Eventsub unsetup")
 
 
 func wait_setup() -> void:
@@ -183,21 +146,10 @@ func wait_for_session_established() -> void:
 func _on_connection_established() -> void:
 	if not _swap_over_process:
 		_action_stack.clear()
-		if _subscriptions.is_empty(): _empty_connections += 1
-		if _empty_connections >= 3:
-			_empty_connections = 0
-			_log.e("Stopped eventsub cause of no subscription.")
-			close_connection()
-			return
-
 		# Resubscribe
 		_log.i("Connection established -> resubscribe to: [%s]" % [_subscriptions])
 		for sub in _subscriptions: _add_action(sub, true)
 	_execute_action_stack()
-
-
-func _on_connection_closed() -> void:
-	session = null
 
 
 func open_connection() -> void:
@@ -207,35 +159,11 @@ func open_connection() -> void:
 		_test_client.open_connection()
 
 
-func close_connection() -> void:
-	if not _client.is_closed:
-		_client.close()
-	if not _test_client.is_closed:
-		_test_client.close()
-
-
 ## Add a new subscription
 func subscribe(eventsub_config: TwitchEventsubConfig) -> void:
 	_log.i("Subscribe to %s" % eventsub_config.definition.get_readable_name())
 	_subscriptions.append(eventsub_config)
 	_add_action(eventsub_config, true)
-	_empty_connections = 0
-
-
-## Returns a list of subscriptions of the given type or empty if none.
-func get_subscription_by_type(type: TwitchEventsubDefinition.Type) -> Array[TwitchEventsubConfig]:
-	var result: Array[TwitchEventsubConfig] = []
-	for subscription in _subscriptions:
-		if subscription.type == type:
-			result.append(subscription)
-	return result
-
-
-func has_subscription(eventsub_definition: TwitchEventsubDefinition, condition: Dictionary) -> bool:
-	for subscription: TwitchEventsubConfig in _subscriptions:
-		if subscription.definition == eventsub_definition && subscription.condition == condition:
-			return true
-	return false
 
 
 ## Remove a subscription
@@ -262,7 +190,7 @@ func _execute_action_stack() -> void:
 
 ## Adds a subscribe or unsubscribe action to the queue
 func _add_action(sub: TwitchEventsubConfig, subscribe: bool) -> void:
-	var sub_action: TwitchEventsub.SubscriptionAction = SubscriptionAction.new()
+	var sub_action = SubscriptionAction.new()
 	sub_action.subscription = sub
 	sub_action.subscribe = subscribe
 	_action_stack.append(sub_action)
@@ -273,9 +201,9 @@ func _add_action(sub: TwitchEventsubConfig, subscribe: bool) -> void:
 ## Refer to https://dev.twitch.tv/docs/eventsub/eventsub-subscription-types/
 ## for details on which API versions are available and which conditions are required.
 func _subscribe(subscription: TwitchEventsubConfig) -> String:
-	var event_name: StringName = subscription.definition.value
-	var version: StringName = subscription.definition.version
-	var conditions: Dictionary = subscription.condition
+	var event_name = subscription.definition.value
+	var version = subscription.definition.version
+	var conditions = subscription.condition
 
 	var data : TwitchCreateEventSubSubscription.Body = TwitchCreateEventSubSubscription.Body.new()
 	var transport : TwitchCreateEventSubSubscription.BodyTransport = TwitchCreateEventSubSubscription.BodyTransport.new()
@@ -302,14 +230,12 @@ func _subscribe(subscription: TwitchEventsubConfig) -> String:
 	if eventsub_response.response.response_code < 200 || eventsub_response.response.response_code >= 300:
 		_log.e("Subscription failed for '%s'. Unknown error %s: %s" % [data.type, eventsub_response.response.response_code, eventsub_response.response.response_data.get_string_from_utf8()])
 		return ""
-	elif eventsub_response.response.response_data.is_empty():
+	elif (eventsub_response.response.response_data.is_empty()):
 		return ""
 	_log.i("Now listening to '%s' events." % data.type)
 
 	var result = JSON.parse_string(eventsub_response.response.response_data.get_string_from_utf8())
-	var subscription_id = result.data[0].id
-	subscription.id = subscription_id
-	return subscription_id
+	return result.data[0].id
 
 
 ## Unsubscribes from an eventsub in case of an error returns false
@@ -325,9 +251,9 @@ func _data_received(data : PackedByteArray) -> void:
 		_log.e("Twitch send something undocumented: %s" % message_str)
 		return
 	var metadata : Metadata = Metadata.new(message_json["metadata"])
-	var id: String = metadata.message_id
-	var timestamp_str: String = metadata.message_timestamp
-	var timestamp: int = Time.get_unix_time_from_datetime_string(timestamp_str)
+	var id = metadata.message_id
+	var timestamp_str = metadata.message_timestamp
+	var timestamp = Time.get_unix_time_from_datetime_string(timestamp_str)
 
 	if(_message_got_processed(id) || _message_is_to_old(timestamp)):
 		return
@@ -337,31 +263,30 @@ func _data_received(data : PackedByteArray) -> void:
 
 	match metadata.message_type:
 		"session_welcome":
-			var welcome_message: TwitchWelcomeMessage = TwitchWelcomeMessage.new(message_json)
+			var welcome_message = TwitchWelcomeMessage.new(message_json)
 			session = welcome_message.payload.session
 			session_id_received.emit(session.id)
 			_log.i("Session established %s" % session.id)
 			message_received.emit(welcome_message)
 		"session_keepalive":
 			# Notification from server that the connection is still alive
-			var keep_alive_message: TwitchKeepaliveMessage = TwitchKeepaliveMessage.new(message_json)
+			var keep_alive_message = TwitchKeepaliveMessage.new(message_json)
 			message_received.emit(keep_alive_message)
 			pass
 		"session_reconnect":
-			var reconnect_message: TwitchReconnectMessage = TwitchReconnectMessage.new(message_json)
+			var reconnect_message = TwitchReconnectMessage.new(message_json)
 			message_received.emit(reconnect_message)
 			_handle_reconnect(reconnect_message)
 		"revocation":
-			var revocation_message: TwitchRevocationMessage = TwitchRevocationMessage.new(message_json)
+			var revocation_message = TwitchRevocationMessage.new(message_json)
 			message_received.emit(revocation_message)
 			events_revoked.emit(revocation_message.payload.subscription.type,
 				revocation_message.payload.subscription.status)
 		"notification":
-			var notification_message: TwitchNotificationMessage = TwitchNotificationMessage.new(message_json)
+			var notification_message = TwitchNotificationMessage.new(message_json)
 			message_received.emit(notification_message)
 			event.emit(notification_message.payload.subscription.type,
 				notification_message.payload.event)
-			event_received.emit(Event.new(notification_message))
 	_cleanup()
 
 

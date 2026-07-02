@@ -13,38 +13,28 @@ class Body extends TwitchData:
 
 	## The ID of the broadcaster whose chat room the message will be sent to.
 	@export var broadcaster_id: String:
-		set(val):
+		set(val): 
 			broadcaster_id = val
 			track_data(&"broadcaster_id", val)
 	
 	## The ID of the user sending the message. This ID must match the user ID in the user access token.
 	@export var sender_id: String:
-		set(val):
+		set(val): 
 			sender_id = val
 			track_data(&"sender_id", val)
 	
 	## The message to send. The message is limited to a maximum of 500 characters. Chat messages can also include emoticons. To include emoticons, use the name of the emote. The names are case sensitive. Don’t include colons around the name (e.g., :bleedPurple:). If Twitch recognizes the name, Twitch converts the name to the emote before writing the chat message to the chat room
 	@export var message: String:
-		set(val):
+		set(val): 
 			message = val
 			track_data(&"message", val)
 	
 	## The ID of the chat message being replied to.
 	@export var reply_parent_message_id: String:
-		set(val):
+		set(val): 
 			reply_parent_message_id = val
 			track_data(&"reply_parent_message_id", val)
-	
-	## **NOTE:** This parameter can only be set when utilizing an App Access Token. It cannot be specified when a User Access Token is used, and will instead result in an HTTP 400 error.  
-	##   
-	## Determines if the chat message is sent only to the source channel (defined by _broadcaster\_id_) during a shared chat session. This has no effect if the message is not sent during a shared chat session.  
-	##   
-	## If this parameter is not set, the default value when using an App Access Token is `false`. On May 19, 2025 the default value for this parameter will be updated to `true`, and chat messages sent using an App Access Token will only be shared with the source channel by default. If you prefer to send a chat message to both channels in a shared chat session, make sure this parameter is explicitly set to `false` in your API request before May 19.
-	@export var for_source_only: bool:
-		set(val):
-			for_source_only = val
-			track_data(&"for_source_only", val)
-	
+	var response: BufferedHTTPClient.ResponseData
 	
 	
 	## Constructor with all required fields.
@@ -56,7 +46,6 @@ class Body extends TwitchData:
 		return body
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Body:
 		var result: Body = Body.new()
 		if d.get("broadcaster_id", null) != null:
@@ -67,8 +56,6 @@ class Body extends TwitchData:
 			result.message = d["message"]
 		if d.get("reply_parent_message_id", null) != null:
 			result.reply_parent_message_id = d["reply_parent_message_id"]
-		if d.get("for_source_only", null) != null:
-			result.for_source_only = d["for_source_only"]
 		return result
 	
 
@@ -79,7 +66,7 @@ class Response extends TwitchData:
 
 	## 
 	@export var data: Array[ResponseData]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -92,13 +79,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(ResponseData.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -109,22 +94,22 @@ class ResponseData extends TwitchData:
 
 	## The message id for the message that was sent.
 	@export var message_id: String:
-		set(val):
+		set(val): 
 			message_id = val
 			track_data(&"message_id", val)
 	
 	## If the message passed all checks and was sent.
 	@export var is_sent: bool:
-		set(val):
+		set(val): 
 			is_sent = val
 			track_data(&"is_sent", val)
 	
 	## The reason the message was dropped, if any.
 	@export var drop_reason: ResponseDropReason:
-		set(val):
+		set(val): 
 			drop_reason = val
 			track_data(&"drop_reason", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -135,7 +120,6 @@ class ResponseData extends TwitchData:
 		return response_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseData:
 		var result: ResponseData = ResponseData.new()
 		if d.get("message_id", null) != null:
@@ -154,16 +138,16 @@ class ResponseDropReason extends TwitchData:
 
 	## Code for why the message was dropped.
 	@export var code: String:
-		set(val):
+		set(val): 
 			code = val
 			track_data(&"code", val)
 	
 	## Message for why the message was dropped.
 	@export var message: String:
-		set(val):
+		set(val): 
 			message = val
 			track_data(&"message", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -174,7 +158,6 @@ class ResponseDropReason extends TwitchData:
 		return response_drop_reason
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseDropReason:
 		var result: ResponseDropReason = ResponseDropReason.new()
 		if d.get("code", null) != null:

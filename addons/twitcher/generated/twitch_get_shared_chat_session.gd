@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## 
 	@export var data: Array[ResponseData]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -26,13 +26,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(ResponseData.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -43,34 +41,34 @@ class ResponseData extends TwitchData:
 
 	## The unique identifier for the shared chat session.
 	@export var session_id: String:
-		set(val):
+		set(val): 
 			session_id = val
 			track_data(&"session_id", val)
 	
 	## The User ID of the host channel.
 	@export var host_broadcaster_id: String:
-		set(val):
+		set(val): 
 			host_broadcaster_id = val
 			track_data(&"host_broadcaster_id", val)
 	
 	## The list of participants in the session.
 	@export var participants: Array[ResponseParticipants]:
-		set(val):
+		set(val): 
 			participants = val
 			track_data(&"participants", val)
 	
 	## The UTC date and time (in RFC3339 format) for when the session was created.
 	@export var created_at: String:
-		set(val):
+		set(val): 
 			created_at = val
 			track_data(&"created_at", val)
 	
 	## The UTC date and time (in RFC3339 format) for when the session was last updated.
 	@export var updated_at: String:
-		set(val):
+		set(val): 
 			updated_at = val
 			track_data(&"updated_at", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -84,7 +82,6 @@ class ResponseData extends TwitchData:
 		return response_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseData:
 		var result: ResponseData = ResponseData.new()
 		if d.get("session_id", null) != null:
@@ -94,7 +91,6 @@ class ResponseData extends TwitchData:
 		if d.get("participants", null) != null:
 			for value in d["participants"]:
 				result.participants.append(ResponseParticipants.from_json(value))
-			result.track_data(&"participants", result.participants)
 		if d.get("created_at", null) != null:
 			result.created_at = d["created_at"]
 		if d.get("updated_at", null) != null:
@@ -109,10 +105,10 @@ class ResponseParticipants extends TwitchData:
 
 	## The User ID of the participant channel.
 	@export var broadcaster_id: String:
-		set(val):
+		set(val): 
 			broadcaster_id = val
 			track_data(&"broadcaster_id", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -122,7 +118,6 @@ class ResponseParticipants extends TwitchData:
 		return response_participants
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseParticipants:
 		var result: ResponseParticipants = ResponseParticipants.new()
 		if d.get("broadcaster_id", null) != null:

@@ -15,16 +15,16 @@ class_name TwitchDropsEntitlementUpdated
 ## * UNAUTHORIZED — The user or organization identified by the user access token is not authorized to update the entitlements.
 ## * UPDATE\_FAILED — The update failed. These are considered transient errors and the request should be retried later.
 @export var status: String:
-	set(val):
+	set(val): 
 		status = val
 		track_data(&"status", val)
 
 ## The list of entitlements that the status in the `status` field applies to.
 @export var ids: Array[String]:
-	set(val):
+	set(val): 
 		ids = val
 		track_data(&"ids", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -35,7 +35,6 @@ static func create(_status: String, _ids: Array[String]) -> TwitchDropsEntitleme
 	return twitch_drops_entitlement_updated
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchDropsEntitlementUpdated:
 	var result: TwitchDropsEntitlementUpdated = TwitchDropsEntitlementUpdated.new()
 	if d.get("status", null) != null:
@@ -43,6 +42,4 @@ static func from_json(d: Dictionary) -> TwitchDropsEntitlementUpdated:
 	if d.get("ids", null) != null:
 		for value in d["ids"]:
 			result.ids.append(value)
-		result.track_data(&"ids", result.ids)
 	return result
-

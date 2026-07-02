@@ -1,5 +1,3 @@
-@tool
-
 static func flash(object: Control, color: Color, duration: float = .25) -> void:
 	var tween = object.create_tween()
 	tween.tween_property(object, ^"modulate", color, duration)\
@@ -11,9 +9,9 @@ static func flash(object: Control, color: Color, duration: float = .25) -> void:
 	await tween.finished
 
 
-static func loading(object: Control, color: Color = Color.YELLOW) -> void:
+static func loading(object: Control) -> void:
 	var tween: Tween = object.create_tween()
-	tween.tween_property(object, ^"modulate", color, 0.2) \
+	tween.tween_property(object, ^"modulate", Color.YELLOW, 0.2) \
 		.set_trans(Tween.TRANS_LINEAR) \
 		.set_ease(Tween.EASE_IN_OUT)
 	await tween.finished

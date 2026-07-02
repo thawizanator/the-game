@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## A list that contains the single team that you requested.
 	@export var data: Array[TwitchTeam]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -26,13 +26,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchTeam.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -43,13 +41,13 @@ class Opt extends TwitchData:
 
 	## The name of the team to get. This parameter and the _id_ parameter are mutually exclusive; you must specify the team’s name or ID but not both.
 	@export var name: String:
-		set(val):
+		set(val): 
 			name = val
 			track_data(&"name", val)
 	
 	## The ID of the team to get. This parameter and the _name_ parameter are mutually exclusive; you must specify the team’s name or ID but not both.
 	@export var id: String:
-		set(val):
+		set(val): 
 			id = val
 			track_data(&"id", val)
 	
@@ -61,7 +59,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("name", null) != null:

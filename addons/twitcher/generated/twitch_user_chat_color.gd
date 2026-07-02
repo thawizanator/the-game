@@ -9,28 +9,28 @@ class_name TwitchUserChatColor
 	
 ## An ID that uniquely identifies the user.
 @export var user_id: String:
-	set(val):
+	set(val): 
 		user_id = val
 		track_data(&"user_id", val)
 
 ## The user’s login name.
 @export var user_login: String:
-	set(val):
+	set(val): 
 		user_login = val
 		track_data(&"user_login", val)
 
 ## The user’s display name.
 @export var user_name: String:
-	set(val):
+	set(val): 
 		user_name = val
 		track_data(&"user_name", val)
 
 ## The Hex color code that the user uses in chat for their name. If the user hasn’t specified a color in their settings, the string is empty.
 @export var color: String:
-	set(val):
+	set(val): 
 		color = val
 		track_data(&"color", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -43,7 +43,6 @@ static func create(_user_id: String, _user_login: String, _user_name: String, _c
 	return twitch_user_chat_color
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchUserChatColor:
 	var result: TwitchUserChatColor = TwitchUserChatColor.new()
 	if d.get("user_id", null) != null:
@@ -55,4 +54,3 @@ static func from_json(d: Dictionary) -> TwitchUserChatColor:
 	if d.get("color", null) != null:
 		result.color = d["color"]
 	return result
-

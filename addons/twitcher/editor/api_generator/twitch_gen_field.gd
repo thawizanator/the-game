@@ -5,7 +5,6 @@ class_name TwitchGenField
 
 var _name: String:
 	set = _update_name
-var _original_name: String
 var _description: String
 var _type: String
 var _is_required: bool
@@ -18,7 +17,6 @@ var _is_typed_array: bool:
 
 ## Couple of names from the Twitch API are messed up like keywords for godot or numbers
 func _update_name(val: String) -> void:
-	_original_name = val
 	match val:
 		"animated": _name = "animated_format"
 		"static": _name = "static_format"
@@ -30,5 +28,4 @@ func _update_name(val: String) -> void:
 		"100x100": _name = "_100x100"
 		"24x24": _name = "_24x24"
 		"300x200": _name = "_300x200"
-		"source-only": _name = "source_only"
 		_: _name = val

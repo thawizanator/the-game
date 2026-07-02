@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## A list that contains the specified extension.
 	@export var data: Array[TwitchExtension]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -26,13 +26,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchExtension.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -43,7 +41,7 @@ class Opt extends TwitchData:
 
 	## The version of the extension to get. If not specified, it returns the latest, released version. If you don’t have a released version, you must specify a version; otherwise, the list is empty.
 	@export var extension_version: String:
-		set(val):
+		set(val): 
 			extension_version = val
 			track_data(&"extension_version", val)
 	
@@ -55,7 +53,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("extension_version", null) != null:

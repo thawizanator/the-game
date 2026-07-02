@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## The active extensions that the broadcaster has installed.
 	@export var data: ResponseData:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -25,7 +25,6 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
@@ -40,22 +39,22 @@ class ResponseData extends TwitchData:
 
 	## A dictionary that contains the data for a panel extension. The dictionary’s key is a sequential number beginning with 1\. The following fields contain the panel’s data for each key.
 	@export var panel: Dictionary:
-		set(val):
+		set(val): 
 			panel = val
 			track_data(&"panel", val)
 	
 	## A dictionary that contains the data for a video-overlay extension. The dictionary’s key is a sequential number beginning with 1\. The following fields contain the overlay’s data for each key.
 	@export var overlay: Dictionary:
-		set(val):
+		set(val): 
 			overlay = val
 			track_data(&"overlay", val)
 	
 	## A dictionary that contains the data for a video-component extension. The dictionary’s key is a sequential number beginning with 1\. The following fields contain the component’s data for each key.
 	@export var component: Dictionary:
-		set(val):
+		set(val): 
 			component = val
 			track_data(&"component", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -64,7 +63,6 @@ class ResponseData extends TwitchData:
 		return response_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseData:
 		var result: ResponseData = ResponseData.new()
 		if d.get("panel", null) != null:
@@ -85,7 +83,7 @@ class Opt extends TwitchData:
 	##   
 	## This parameter is required if you specify an app access token and is optional if you specify a user access token. If you specify a user access token and don’t specify this parameter, the API uses the user ID from the access token.
 	@export var user_id: String:
-		set(val):
+		set(val): 
 			user_id = val
 			track_data(&"user_id", val)
 	
@@ -97,7 +95,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("user_id", null) != null:

@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## The broadcaster’s streaming schedule.
 	@export var data: ResponseData:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -26,7 +26,6 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
@@ -41,40 +40,40 @@ class ResponseData extends TwitchData:
 
 	## The list of broadcasts in the broadcaster’s streaming schedule.
 	@export var segments: Array[TwitchChannelStreamScheduleSegment]:
-		set(val):
+		set(val): 
 			segments = val
 			track_data(&"segments", val)
 	
 	## The ID of the broadcaster that owns the broadcast schedule.
 	@export var broadcaster_id: String:
-		set(val):
+		set(val): 
 			broadcaster_id = val
 			track_data(&"broadcaster_id", val)
 	
 	## The broadcaster’s display name.
 	@export var broadcaster_name: String:
-		set(val):
+		set(val): 
 			broadcaster_name = val
 			track_data(&"broadcaster_name", val)
 	
 	## The broadcaster’s login name.
 	@export var broadcaster_login: String:
-		set(val):
+		set(val): 
 			broadcaster_login = val
 			track_data(&"broadcaster_login", val)
 	
 	## The dates when the broadcaster is on vacation and not streaming. Is set to **null** if vacation mode is not enabled.
 	@export var vacation: ResponseVacation:
-		set(val):
+		set(val): 
 			vacation = val
 			track_data(&"vacation", val)
 	
 	## The information used to page through a list of results. The object is empty if there are no more pages left to page through. [Read more](https://dev.twitch.tv/docs/api/guide#pagination).
 	@export var pagination: ResponsePagination:
-		set(val):
+		set(val): 
 			pagination = val
 			track_data(&"pagination", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -88,13 +87,11 @@ class ResponseData extends TwitchData:
 		return response_data
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseData:
 		var result: ResponseData = ResponseData.new()
 		if d.get("segments", null) != null:
 			for value in d["segments"]:
 				result.segments.append(TwitchChannelStreamScheduleSegment.from_json(value))
-			result.track_data(&"segments", result.segments)
 		if d.get("broadcaster_id", null) != null:
 			result.broadcaster_id = d["broadcaster_id"]
 		if d.get("broadcaster_name", null) != null:
@@ -135,21 +132,20 @@ class ResponseData extends TwitchData:
 	func _iter_init(iter: Array) -> bool:
 		if segments.is_empty(): return false
 		iter[0] = segments[0]
-		_cur_iter = 1
-		return true
-	
-	
+		return segments.size() > 0
+		
+		
 	func _iter_next(iter: Array) -> bool:
-		if segments.size() > _cur_iter:
-			iter[0] = segments[_cur_iter]
+		if segments.size() - 1 > _cur_iter:
 			_cur_iter += 1
-		elif not _has_pagination():
+			iter[0] = segments[_cur_iter]
+		if segments.size() - 1 == _cur_iter && not _has_pagination(): 
 			return false
 		return true
-	
-	
+		
+		
 	func _iter_get(iter: Variant) -> Variant:
-		if segments.size() == _cur_iter && _has_pagination():
+		if segments.size() - 1 == _cur_iter && _has_pagination():
 			await next_page()
 		return iter
 
@@ -160,16 +156,16 @@ class ResponseVacation extends TwitchData:
 
 	## The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation starts.
 	@export var start_time: String:
-		set(val):
+		set(val): 
 			start_time = val
 			track_data(&"start_time", val)
 	
 	## The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation ends.
 	@export var end_time: String:
-		set(val):
+		set(val): 
 			end_time = val
 			track_data(&"end_time", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -180,7 +176,6 @@ class ResponseVacation extends TwitchData:
 		return response_vacation
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponseVacation:
 		var result: ResponseVacation = ResponseVacation.new()
 		if d.get("start_time", null) != null:
@@ -197,10 +192,10 @@ class ResponsePagination extends TwitchData:
 
 	## The cursor used to get the next page of results. Set the request’s _after_ query parameter to this value.
 	@export var cursor: String:
-		set(val):
+		set(val): 
 			cursor = val
 			track_data(&"cursor", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -209,7 +204,6 @@ class ResponsePagination extends TwitchData:
 		return response_pagination
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponsePagination:
 		var result: ResponsePagination = ResponsePagination.new()
 		if d.get("cursor", null) != null:
@@ -224,31 +218,31 @@ class Opt extends TwitchData:
 
 	## The ID of the scheduled segment to return. To specify more than one segment, include the ID of each segment you want to get. For example, `id=1234&id=5678`. You may specify a maximum of 100 IDs.
 	@export var id: Array[String]:
-		set(val):
+		set(val): 
 			id = val
 			track_data(&"id", val)
 	
 	## The UTC date and time that identifies when in the broadcaster’s schedule to start returning segments. If not specified, the request returns segments starting after the current UTC date and time. Specify the date and time in RFC3339 format (for example, `2022-09-01T00:00:00Z`).
 	@export var start_time: String:
-		set(val):
+		set(val): 
 			start_time = val
 			track_data(&"start_time", val)
 	
 	## Not supported.
 	@export var utc_offset: String:
-		set(val):
+		set(val): 
 			utc_offset = val
 			track_data(&"utc_offset", val)
 	
 	## The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 25 items per page. The default is 20.
 	@export var first: int:
-		set(val):
+		set(val): 
 			first = val
 			track_data(&"first", val)
 	
 	## The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
 	@export var after: String:
-		set(val):
+		set(val): 
 			after = val
 			track_data(&"after", val)
 	
@@ -260,13 +254,11 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("id", null) != null:
 			for value in d["id"]:
 				result.id.append(value)
-			result.track_data(&"id", result.id)
 		if d.get("start_time", null) != null:
 			result.start_time = d["start_time"]
 		if d.get("utc_offset", null) != null:

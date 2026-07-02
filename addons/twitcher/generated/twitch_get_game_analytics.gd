@@ -13,13 +13,13 @@ class Response extends TwitchData:
 
 	## A list of reports. The reports are returned in no particular order; however, the data within each report is in ascending order by date (newest first). The report contains one row of data per day of the reporting window; the report contains rows for only those days that the game was used. A report is available only if the game was broadcast for at least 5 hours over the reporting period. The array is empty if there are no reports.
 	@export var data: Array[TwitchGameAnalytics]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	
 	## Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
 	@export var pagination: ResponsePagination:
-		set(val):
+		set(val): 
 			pagination = val
 			track_data(&"pagination", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -32,13 +32,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchGameAnalytics.from_json(value))
-			result.track_data(&"data", result.data)
 		if d.get("pagination", null) != null:
 			result.pagination = ResponsePagination.from_json(d["pagination"])
 		return result
@@ -67,21 +65,20 @@ class Response extends TwitchData:
 	func _iter_init(iter: Array) -> bool:
 		if data.is_empty(): return false
 		iter[0] = data[0]
-		_cur_iter = 1
-		return true
-	
-	
+		return data.size() > 0
+		
+		
 	func _iter_next(iter: Array) -> bool:
-		if data.size() > _cur_iter:
-			iter[0] = data[_cur_iter]
+		if data.size() - 1 > _cur_iter:
 			_cur_iter += 1
-		elif not _has_pagination():
+			iter[0] = data[_cur_iter]
+		if data.size() - 1 == _cur_iter && not _has_pagination(): 
 			return false
 		return true
-	
-	
+		
+		
 	func _iter_get(iter: Variant) -> Variant:
-		if data.size() == _cur_iter && _has_pagination():
+		if data.size() - 1 == _cur_iter && _has_pagination():
 			await next_page()
 		return iter
 
@@ -92,10 +89,10 @@ class ResponsePagination extends TwitchData:
 
 	## The cursor used to get the next page of results. Use the cursor to set the request’s _after_ query parameter.
 	@export var cursor: String:
-		set(val):
+		set(val): 
 			cursor = val
 			track_data(&"cursor", val)
-	var response: BufferedHTTPClient.ResponseData
+	
 	
 	
 	## Constructor with all required fields.
@@ -104,7 +101,6 @@ class ResponsePagination extends TwitchData:
 		return response_pagination
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> ResponsePagination:
 		var result: ResponsePagination = ResponsePagination.new()
 		if d.get("cursor", null) != null:
@@ -119,7 +115,7 @@ class Opt extends TwitchData:
 
 	## The game’s client ID. If specified, the response contains a report for the specified game. If not specified, the response includes a report for each of the authenticated user’s games.
 	@export var game_id: String:
-		set(val):
+		set(val): 
 			game_id = val
 			track_data(&"game_id", val)
 	
@@ -127,7 +123,7 @@ class Opt extends TwitchData:
 	##   
 	## * overview\_v2
 	@export var type: String:
-		set(val):
+		set(val): 
 			type = val
 			track_data(&"type", val)
 	
@@ -137,7 +133,7 @@ class Opt extends TwitchData:
 	##   
 	## The report contains one row of data for each day in the reporting window.
 	@export var started_at: String:
-		set(val):
+		set(val): 
 			started_at = val
 			track_data(&"started_at", val)
 	
@@ -145,7 +141,7 @@ class Opt extends TwitchData:
 	##   
 	## Specify an end date only if you provide a start date. Because it can take up to two days for the data to be available, you must specify an end date that’s earlier than today minus one to two days. If not, the API ignores your end date and uses an end date that is today minus one to two days.
 	@export var ended_at: String:
-		set(val):
+		set(val): 
 			ended_at = val
 			track_data(&"ended_at", val)
 	
@@ -153,7 +149,7 @@ class Opt extends TwitchData:
 	##   
 	## **NOTE**: While you may specify a maximum value of 100, the response will contain at most 20 URLs per page.
 	@export var first: int:
-		set(val):
+		set(val): 
 			first = val
 			track_data(&"first", val)
 	
@@ -161,7 +157,7 @@ class Opt extends TwitchData:
 	##   
 	## This parameter is ignored if _game\_id_ parameter is set.
 	@export var after: String:
-		set(val):
+		set(val): 
 			after = val
 			track_data(&"after", val)
 	
@@ -173,7 +169,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("game_id", null) != null:

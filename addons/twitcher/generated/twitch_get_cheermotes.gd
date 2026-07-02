@@ -13,7 +13,7 @@ class Response extends TwitchData:
 
 	## The list of Cheermotes. The list is in ascending order by the `order` field’s value.
 	@export var data: Array[TwitchCheermote]:
-		set(val):
+		set(val): 
 			data = val
 			track_data(&"data", val)
 	var response: BufferedHTTPClient.ResponseData
@@ -26,13 +26,11 @@ class Response extends TwitchData:
 		return response
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Response:
 		var result: Response = Response.new()
 		if d.get("data", null) != null:
 			for value in d["data"]:
 				result.data.append(TwitchCheermote.from_json(value))
-			result.track_data(&"data", result.data)
 		return result
 	
 
@@ -45,7 +43,7 @@ class Opt extends TwitchData:
 	##   
 	## If the broadcaster uploaded Cheermotes, the `type` field in the response is set to **channel\_custom**.
 	@export var broadcaster_id: String:
-		set(val):
+		set(val): 
 			broadcaster_id = val
 			track_data(&"broadcaster_id", val)
 	
@@ -57,7 +55,6 @@ class Opt extends TwitchData:
 		return opt
 	
 	
-	## Used to transform responses to the current object
 	static func from_json(d: Dictionary) -> Opt:
 		var result: Opt = Opt.new()
 		if d.get("broadcaster_id", null) != null:

@@ -9,31 +9,31 @@ class_name TwitchBlockedTerm
 	
 ## The broadcaster that owns the list of blocked terms.
 @export var broadcaster_id: String:
-	set(val):
+	set(val): 
 		broadcaster_id = val
 		track_data(&"broadcaster_id", val)
 
 ## The moderator that blocked the word or phrase from being used in the broadcaster’s chat room.
 @export var moderator_id: String:
-	set(val):
+	set(val): 
 		moderator_id = val
 		track_data(&"moderator_id", val)
 
 ## An ID that identifies this blocked term.
 @export var id: String:
-	set(val):
+	set(val): 
 		id = val
 		track_data(&"id", val)
 
 ## The blocked word or phrase.
 @export var text: String:
-	set(val):
+	set(val): 
 		text = val
 		track_data(&"text", val)
 
 ## The UTC date and time (in RFC3339 format) that the term was blocked.
 @export var created_at: String:
-	set(val):
+	set(val): 
 		created_at = val
 		track_data(&"created_at", val)
 
@@ -41,7 +41,7 @@ class_name TwitchBlockedTerm
 ##   
 ## When the term is added, this timestamp is the same as `created_at`. The timestamp changes as AutoMod continues to deny the term.
 @export var updated_at: String:
-	set(val):
+	set(val): 
 		updated_at = val
 		track_data(&"updated_at", val)
 
@@ -49,10 +49,10 @@ class_name TwitchBlockedTerm
 ##   
 ## This field is **null** if the term was added manually or was permanently blocked by AutoMod.
 @export var expires_at: String:
-	set(val):
+	set(val): 
 		expires_at = val
 		track_data(&"expires_at", val)
-
+var response: BufferedHTTPClient.ResponseData
 
 
 ## Constructor with all required fields.
@@ -68,7 +68,6 @@ static func create(_broadcaster_id: String, _moderator_id: String, _id: String, 
 	return twitch_blocked_term
 
 
-## Used to transform responses to the current object
 static func from_json(d: Dictionary) -> TwitchBlockedTerm:
 	var result: TwitchBlockedTerm = TwitchBlockedTerm.new()
 	if d.get("broadcaster_id", null) != null:
@@ -86,4 +85,3 @@ static func from_json(d: Dictionary) -> TwitchBlockedTerm:
 	if d.get("expires_at", null) != null:
 		result.expires_at = d["expires_at"]
 	return result
-

@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/version="0.5.1-Dev"
+config/version="0.5.10-Dev"
 run/main_scene="uid://crloofxe0pjcw"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="uid://dg15lf3ixcb6d"
@@ -18,6 +18,7 @@ config/icon="uid://dg15lf3ixcb6d"
 [autoload]
 
 GlobalSystem="*uid://dhqp1y6ap5bys"
+TwitchService="*res://addons/twitcher/twitch_service.tscn"
 
 [display]
 
@@ -45,6 +46,11 @@ enabled=PackedStringArray("res://addons/godot-socketio/plugin.cfg", "res://addon
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+
+[twitcher]
+
+editor/show_setup_on_startup=false
+editor/project_preset=&"Game"
 
 [version_bumper]
 
